@@ -14,7 +14,7 @@ export class UserDetailService {
    }
 
  get userDetail(){
-   return Observable.of(this._userDetail);
+   return 0;
  } 
 
   getuserDetail(){

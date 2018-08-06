@@ -18,6 +18,7 @@ import { CookiesService } from './shared/services/utilities/util_cookies/cookies
 import { DocumentRefService } from './shared/services/utilities/util_docRef/document-ref.service';
 import { WindowRefService } from './shared/services/utilities/util_winRef/window-ref.service';
 import { LoginComponent } from './login/login.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 const appRoutes: Routes = [
@@ -43,7 +44,7 @@ const appRoutes: Routes = [
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
     LayoutModule,
-    
+    FlexLayoutModule ,
     RouterModule.forRoot(appRoutes),
     MatToolbarModule,
     MatButtonModule,
@@ -54,7 +55,6 @@ const appRoutes: Routes = [
     MatCardModule,
     MatGridListModule,
     MatTabsModule,
-    
     HttpClientModule
     
     

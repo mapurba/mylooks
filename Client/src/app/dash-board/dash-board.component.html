@@ -8,7 +8,7 @@
           <div class="profile__title">
             <h3 class="profile__username">{{userDetail?.profile?.name}}</h3>
             <a href="edit-profile.html">Edit profile</a>
-            <i class="fa fa-cog fa-lg"></i>
+            <i (click)="importPhotos()" class="fa fa-cog fa-lg"></i>
           </div>
           <ul class="profile__stats">
             <li class="profile__stat">
@@ -48,65 +48,19 @@
       </div> -->
       
       <section class="profile__photos">
-        <div class="profile__photo">
-          <img src="https://instagram.fdel21-1.fna.fbcdn.net/vp/a9f044cf3a460f72be358578d1647dc8/5BFCB746/t51.2885-15/e35/37619672_506457459854058_3677330159653879808_n.jpg"
-          />
+        <div class="profile__photo" *ngFor="let photos of unSubmitedPhotos">
+          <img src="{{photos.media_url}}" />
           <div class="profile__photo-overlay">
             <span class="overlay__item">
               <i class="fa fa-heart"></i>
-              486
+              {{photos.like_count}}
             </span>
-            <span class="overlay__item">
+            <!-- <span class="overlay__item">
               <i class="fa fa-comment"></i>
               344
-            </span>
+            </span> -->
           </div>
-        </div>
-      
-        <div class="profile__photo">
-          <img src="https://instagram.fdel21-1.fna.fbcdn.net/vp/a9f044cf3a460f72be358578d1647dc8/5BFCB746/t51.2885-15/e35/37619672_506457459854058_3677330159653879808_n.jpg"
-          />
-          <div class="profile__photo-overlay">
-            <span class="overlay__item">
-              <i class="fa fa-heart"></i>
-              486
-            </span>
-            <span class="overlay__item">
-              <i class="fa fa-comment"></i>
-              344
-            </span>
-          </div>
-        </div>
-        <div class="profile__photo">
-          <img src="https://instagram.fdel21-1.fna.fbcdn.net/vp/a9f044cf3a460f72be358578d1647dc8/5BFCB746/t51.2885-15/e35/37619672_506457459854058_3677330159653879808_n.jpg"
-          />
-          <div class="profile__photo-overlay">
-            <span class="overlay__item">
-              <i class="fa fa-heart"></i>
-              486
-            </span>
-            <span class="overlay__item">
-              <i class="fa fa-comment"></i>
-              344
-            </span>
-          </div>
-        </div>
-      
-        <div class="profile__photo">
-          <img src="https://instagram.fdel21-1.fna.fbcdn.net/vp/a9f044cf3a460f72be358578d1647dc8/5BFCB746/t51.2885-15/e35/37619672_506457459854058_3677330159653879808_n.jpg"
-          />
-          <div class="profile__photo-overlay">
-            <span class="overlay__item">
-              <i class="fa fa-heart"></i>
-              486
-            </span>
-            <span class="overlay__item">
-              <i class="fa fa-comment"></i>
-              344
-            </span>
-          </div>
-        </div>
-      
+        </div> 
       </section>
       
 </div>

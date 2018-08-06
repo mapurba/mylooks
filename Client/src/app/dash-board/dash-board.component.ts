@@ -27,13 +27,21 @@ export class DashBoardComponent implements OnInit {
 
 
   ngOnInit() {
-    this.login();
+    this.getAllUnSubmitedPhotos();
     this.getuserDetail();
   }
 
-  login() {
+  getAllUnSubmitedPhotos() {
     this.http.get('/api/account/getAllUnSubmitedPhotos').subscribe((res:any) => {
       this.unSubmitedPhotos = res;
+
+    }, (err) => {
+
+    });
+  }
+  importPhotos(){
+    this.http.get('/api/api/importInstagramPhotos').subscribe((res:any) => {
+      console.log('sucessfully importeed the photos')
 
     }, (err) => {
 
@@ -44,7 +52,7 @@ export class DashBoardComponent implements OnInit {
    this.UserDetailService.getuserDetail().subscribe((res)=>{
     this.userDetail=res;
    },err=>{
-     
+
    });
   }
 

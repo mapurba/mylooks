@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy": " gcloud preview app deploy app.yaml --promote"
   },
   "private": true,
   "dependencies": {
@@ -16,6 +17,7 @@
     "@angular/common": "^6.0.3",
     "@angular/compiler": "^6.0.3",
     "@angular/core": "^6.0.3",
+    "@angular/flex-layout": "^6.0.0-beta.17",
     "@angular/forms": "^6.0.3",
     "@angular/http": "^6.0.3",
     "@angular/material": "^6.4.2",

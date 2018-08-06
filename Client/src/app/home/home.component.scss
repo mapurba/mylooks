@@ -1,0 +1,29 @@
+.example-card {
+    max-width: 400px;
+  }
+  
+  .example-header-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+  }
+  .product-image{
+    object-fit: cover; /*this makes de image in src fit to the size of specified below*/
+    width: 20%; /* Here you can use wherever you want to specify the width and also the height of the <img>*/
+    height: 20%;
+  }
+
+  .img {
+    width: 100%;
+    margin-bottom: 18%;
+  }
+  .card-picture {
+    width: 23%;
+    margin-bottom: 2%;
+  }
+  .container {
+    min-height: 100%;
+    width: 100%;
+  }
+  .search-form {
+    width: 90%;
+  }
