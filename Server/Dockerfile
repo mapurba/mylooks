@@ -1,5 +1,6 @@
 FROM node:8-slim
 
+WORKDIR /
 ENV NODE_ENV development
 
 
