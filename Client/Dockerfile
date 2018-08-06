@@ -1,5 +1,5 @@
 FROM node:8
-
+FROM httpd:2.4
 # Create app directory
 WORKDIR /usr/src/app/client
 
@@ -9,6 +9,9 @@ WORKDIR /usr/src/app/client
 COPY package*.json ./
 
 RUN npm install
+RUN npm run build --prod 
+COPY ./dist/ /usr/local/apache2/htdocs/
+
 # If you are building your code for production
 # RUN npm install --only=production
 
