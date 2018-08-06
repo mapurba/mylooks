@@ -1,17 +1,8 @@
-version: '3'
+version: '2.1'
+
 services:
-  angular-starter:
-    build:
-      context: .
-      dockerfile: Dockerfile-dev
-    container_name: angular-starter
-    networks:
-      - angular-starter
-    ports:
-      - '3000:3000'
+  docker-angular-cli:
+    image: johnpapa/angular-cli
+    build: .
     environment:
-     - HOST=0.0.0.0
-    command: npm run start
-networks:
-  angular-starter:
-    driver: bridge
+      NODE_ENV: production
