@@ -35,7 +35,7 @@ const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
-
+const mongodb = require('mongodb');
 /**
  * API keys and Passport configuration.
  */
@@ -56,6 +56,11 @@ mongoose.connection.on('error', (err) => {
   process.exit();
 });
 
+// mongodb.MongoClient.connect(process.env.MONGODB_URI, (err, client) => {
+//   if (err) {
+//     throw err;
+//     process.exit();
+//   }
 /**
  * Express configuration.
  */
