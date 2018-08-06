@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": " gcloud preview app deploy app.yaml --promote"
+    "deploy": " gcloud preview app deploy app.yaml --promote",
+    "docker-build":"npm run build --prod && docker build -t angular-webpack-starter:latest ."
   },
   "private": true,
   "dependencies": {
