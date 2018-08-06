@@ -1,22 +1,6 @@
-FROM node:8
-FROM httpd:2.4
-# Create app directory
-WORKDIR /usr/src/app/client
+FROM nginx:alpine
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+COPY nginx.conf /etc/nginx/nginx.conf
 
-RUN npm install
-RUN ng build --prod
-COPY ./dist/ /usr/local/apache2/htdocs/
-
-# If you are building your code for production
-# RUN npm install --only=production
-
-# Bundle app source
-COPY . .
-
-EXPOSE 4200
-CMD [ "npm", "start" ]
+WORKDIR /usr/share/nginx/html
+COPY dist/ .
