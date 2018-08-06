@@ -50,9 +50,6 @@ export class InterceptService implements HttpInterceptor {
         if(error.status == 401){
           this.route.navigate(['/login']);
           console.error('not logged in');
-        }else{
-          this.route.navigate(['/login']);
-          console.log('you internet is Down ');
         }
        
       })

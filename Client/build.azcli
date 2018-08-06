@@ -1,3 +1,0 @@
-docker build . -t johnpapa/angular-cli
-
-docker push johnpapa/angular-cli

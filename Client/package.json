@@ -4,12 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": " ng serve  --proxy-config proxy.config.json --host 0.0.0.0",
-    "build": "ng build --prod",
+    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": " gcloud preview app deploy app.yaml --promote",
-    "docker-build":"npm run build --prod && docker build -t angular-webpack-starter:latest ."
+    "deploy": " gcloud preview app deploy app.yaml --promote"
   },
   "private": true,
   "dependencies": {
