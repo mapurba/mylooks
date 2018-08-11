@@ -65,7 +65,7 @@ mongoose.connection.on('error', (err) => {
  * Express configuration.
  */
 app.set('host', process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0');
-app.set('port', process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080);
+app.set('port', process.env.PORT ||'9000');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.use(expressStatusMonitor());
@@ -75,7 +75,7 @@ app.use(sass({
   dest: path.join(__dirname, 'public')
 }));
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Headers", "Origin,Content-Type, Authorization, x-id, Content-Length, X-Requested-With");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -108,7 +108,8 @@ app.use((req, res, next) => {
 });
 app.use((req, res, next) => {
   // After successful login, redirect back to the intended page
-  if (!req.user &&
+ /*
+	if (!req.user &&
     req.path !== '/login' &&
     req.path !== '/signup' &&
     !req.path.match(/^\/auth/) &&
@@ -118,6 +119,7 @@ app.use((req, res, next) => {
     (req.path === '/account' || req.path.match(/^\/api/))) {
     req.session.returnTo = req.originalUrl;
   }
+	*/
   next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
@@ -167,9 +169,9 @@ app.get('/api', apiController.getApi);
 
 app.get('/api/importInstagramPhotos', passportConfig.isAuthenticated,  apiController.getFacebook);
 
-app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), (req, res) => {
-  res.redirect('http://localhost:4200/Dashboard');
+app.get('/api/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }));
+app.get('/api/auth/facebook/callback', passport.authenticate('facebook'), (req, res) => {
+  res.redirect('https://buymylooks.westeurope.cloudapp.azure.com/#/Dashboard');
 });
 
 app.get('/admin', apiController.getApi);
@@ -197,3 +199,8 @@ app.listen(app.get('port'), () => {
 });
 
 module.exports = app;
+
+
+
+
+
