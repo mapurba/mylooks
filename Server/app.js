@@ -153,13 +153,13 @@ app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
-app.get('/account/detail', passportConfig.isAuthenticated, userController.getAccountDetail);
+app.get('/api/account/detail', passportConfig.isAuthenticated, userController.getAccountDetail);
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.post('/account/importPhotosFromInstagram', passportConfig.isAuthenticated, userController.importUserPhotos);
 
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
-app.get('/account/getAllUnSubmitedPhotos', passportConfig.isAuthenticated, userController.getAllUnSubmitedPhotos);
+app.get('/api/account/getAllUnSubmitedPhotos', passportConfig.isAuthenticated, userController.getAllUnSubmitedPhotos);
 app.get('/account/myblog/:userId', homeController.getUserBlog);
 
 /**
