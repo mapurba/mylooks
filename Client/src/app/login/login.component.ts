@@ -14,16 +14,9 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit() {
-    this.getuserDetail();
+   // this.getuserDetail();
   }
 
-  getuserDetail(){
-    this.UserDetailService.getuserDetail().subscribe((res)=>{
-     console.log(res);
-     this.router.navigate(['/Dashboard']);
-    },err=>{
-
-    });
-   }
+  
 
 }
