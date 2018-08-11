@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   getuserDetail(){
     this.UserDetailService.getuserDetail().subscribe((res)=>{
      console.log(res);
-     this.route.navigate(['/Dashboard']);
+     this.router.navigate(['/Dashboard']);
     },err=>{
 
     });
