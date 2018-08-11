@@ -8,10 +8,10 @@ const InstagramPhotos = require('../models/InstagramPhotos');
  * List of API examples.
  */
 exports.getApi = (req, res) => {
-    res.render('api/index', {
-        title: 'API Examples'
-    });
-    // res.status(200).send();
+    // res.render('api/index', {
+    //     title: 'API Examples'
+    // });
+    res.status(200).send();
 
 };
 
