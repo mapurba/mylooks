@@ -74,13 +74,7 @@ app.use(sass({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public')
 }));
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Headers", "Origin,Content-Type, Authorization, x-id, Content-Length, X-Requested-With");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    next();
-});
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -108,7 +102,7 @@ app.use((req, res, next) => {
 });
 app.use((req, res, next) => {
   // After successful login, redirect back to the intended page
- /*
+ 
 	if (!req.user &&
     req.path !== '/login' &&
     req.path !== '/signup' &&
@@ -119,14 +113,14 @@ app.use((req, res, next) => {
     (req.path === '/account' || req.path.match(/^\/api/))) {
     req.session.returnTo = req.originalUrl;
   }
-	*/
+	
   next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
-/*app.use(function(req, res, next) {
+app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     next();
-});*/
+});
 
 /**
  * Primary app routes.
@@ -153,13 +147,13 @@ app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
-app.get('/api/account/detail', passportConfig.isAuthenticated, userController.getAccountDetail);
+app.get('/account/detail', passportConfig.isAuthenticated, userController.getAccountDetail);
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.post('/account/importPhotosFromInstagram', passportConfig.isAuthenticated, userController.importUserPhotos);
 
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
-app.get('/api/account/getAllUnSubmitedPhotos', passportConfig.isAuthenticated, userController.getAllUnSubmitedPhotos);
+app.get('/account/getAllUnSubmitedPhotos', passportConfig.isAuthenticated, userController.getAllUnSubmitedPhotos);
 app.get('/account/myblog/:userId', homeController.getUserBlog);
 
 /**
@@ -169,8 +163,8 @@ app.get('/api', apiController.getApi);
 
 app.get('/api/importInstagramPhotos', passportConfig.isAuthenticated,  apiController.getFacebook);
 
-app.get('/api/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }));
-app.get('/api/auth/facebook/callback', passport.authenticate('facebook'), (req, res) => {
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }));
+app.get('/auth/facebook/callback',passport.authenticate('facebook',{ failureRedirect: 'https://buymylooks.westeurope.cloudapp.azure.com/#/login' }), (req, res) => {
   res.redirect('https://buymylooks.westeurope.cloudapp.azure.com/#/Dashboard');
 });
 
@@ -199,6 +193,26 @@ app.listen(app.get('port'), () => {
 });
 
 module.exports = app;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
