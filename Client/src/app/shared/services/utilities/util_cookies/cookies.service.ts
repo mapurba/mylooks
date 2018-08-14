@@ -30,5 +30,18 @@ export class CookiesService {
   deleteCookie(name: string) {
     this.setCookie(name, "", '/', -1);
   }
+   eraseCookieFromAllPaths(name) {
+    // This function will attempt to remove a cookie from all paths.
+    var pathBits = location.pathname.split('/');
+    var pathCurrent = ' path=';
+
+    // do a simple pathless delete first.
+    this.documentRef.nativeDocument.cookie = name + '=; expires=Thu, 01-Jan-1970 00:00:01 GMT;';
+
+    for (var i = 0; i < pathBits.length; i++) {
+        pathCurrent += ((pathCurrent.substr(-1) != '/') ? '/' : '') + pathBits[i];
+        this.documentRef.nativeDocument.cookie = name + '=; expires=Thu, 01-Jan-1970 00:00:01 GMT;' + pathCurrent + ';';
+    }
+}
 
 }

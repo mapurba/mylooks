@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '../../../node_modules/@angular/common/http';
 import { UserDetailService } from '../shared/services/user-detail.service';
+import { CookiesService } from 'src/app/shared/services/utilities/util_cookies/cookies.service';
 
 @Component({
   selector: 'app-nav',
@@ -17,7 +18,7 @@ export class NavComponent {
       map(result => result.matches)
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient,private userDetail:UserDetailService) {
+  constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient,private userDetail:UserDetailService,private CookiesService:CookiesService) {
     this.userDetail.getuserDetail();
    }
 
@@ -25,6 +26,9 @@ export class NavComponent {
     this.http.get('/api/api/importInstagramPhotos').subscribe((res)=>{
 
     })
+  }
+  logout(){
+    this.CookiesService.eraseCookieFromAllPaths('');
   }
    
 }

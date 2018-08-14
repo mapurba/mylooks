@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatGridListModule, MatCardModule, MatTabsModule } from '@angular/material';
+import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatGridListModule, MatCardModule, MatTabsModule, MatMenuModule } from '@angular/material';
 import { DashBoardComponent } from './dash-board/dash-board.component';
 import { BlogComponent } from './blog/blog.component';
 import { HomeComponent } from './home/home.component';
@@ -49,7 +49,8 @@ import { routing } from 'src/app/app.routing';
     MatCardModule,
     MatGridListModule,
     MatTabsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatMenuModule
   ],
   providers: [
     // WindowRefService,

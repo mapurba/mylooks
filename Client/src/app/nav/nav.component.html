@@ -25,15 +25,15 @@
             <i class="fa fa-heart-o fa-lg"></i>
           </a>
         </li>
-        <div class="dropdown">
-          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <li class="navigation__list-item">
+          <a   [matMenuTriggerFor]="menu" class="navigation__link">
             <i class="fa fa-user-o fa-lg"></i>
           </a>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="logout()">Logout</button>
+</mat-menu>
+        </li>
         
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" href="#" (click)="logout()">Logout</a>
-          </div>
-        </div>
       </ul>
     </div>
   </nav>
