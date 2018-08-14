@@ -13,7 +13,6 @@ import { BlogComponent } from './blog/blog.component';
 import { HomeComponent } from './home/home.component';
 import { InterceptService } from './shared/services/http.interceptor.service';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '../../node_modules/@angular/common/http';
-import { CookiesService } from './shared/services/utilities/util_cookies/cookies.service';
 import { DocumentRefService } from './shared/services/utilities/util_docRef/document-ref.service';
 import { WindowRefService } from './shared/services/utilities/util_winRef/window-ref.service';
 import { LoginComponent } from './login/login.component';
@@ -55,7 +54,7 @@ import { routing } from 'src/app/app.routing';
   providers: [
     // WindowRefService,
     DocumentRefService,
-    CookiesService,
+    CookieService,
     InterceptService,
     {
       provide: HTTP_INTERCEPTORS,

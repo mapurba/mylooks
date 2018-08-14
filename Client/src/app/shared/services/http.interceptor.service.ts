@@ -1,6 +1,5 @@
 import {Injectable, Injector} from "@angular/core";
 import {HttpClient, HttpErrorResponse, HttpHandler, HttpHeaderResponse, HttpInterceptor, HttpProgressEvent, HttpRequest, HttpResponse, HttpSentEvent, HttpUserEvent, HttpEvent} from "@angular/common/http";
-import { CookiesService } from "./utilities/util_cookies/cookies.service";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, filter, tap } from 'rxjs/operators';
 import { Router } from "../../../../node_modules/@angular/router";
@@ -19,24 +18,24 @@ export class InterceptService implements HttpInterceptor {
 
 
 
-  constructor( private injector: Injector, private cookiesService: CookiesService,private route:Router) {
+  constructor( private injector: Injector,private route:Router) {
 
     this.isRefreshingToken = false;
   }
 
-  addToken(req: HttpRequest<any>): HttpRequest<any> {
+  // addToken(req: HttpRequest<any>): HttpRequest<any> {
 
-    let spiffyCookie = this.cookiesService.getCookie('Spiffy_Session');
-    if (spiffyCookie != undefined) {
-      let spiffyComponents = spiffyCookie.split(',');
-      req = req.clone({setHeaders: {Authorization: 'Bearer ' + spiffyComponents[1]}});
-      let headerValue = this.cookiesService.getCookie('token');
-      const authReq = req.clone({
-        headers: req.headers.set('token', headerValue)
-      });
-    }
-    return req;
-  }
+    // let spiffyCookie = this.cookiesService.getCookie('Spiffy_Session');
+    // if (spiffyCookie != undefined) {
+    //   let spiffyComponents = spiffyCookie.split(',');
+    //   req = req.clone({setHeaders: {Authorization: 'Bearer ' + spiffyComponents[1]}});
+    //   let headerValue = this.cookiesService.getCookie('token');
+    //   const authReq = req.clone({
+    //     headers: req.headers.set('token', headerValue)
+    //   });
+    // }
+    // return req;
+  // }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this._next = next;
