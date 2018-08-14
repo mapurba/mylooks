@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '../../../node_modules/@angular/common/http';
 import { UserDetailService } from '../shared/services/user-detail.service';
-import { CookiesService } from 'src/app/shared/services/utilities/util_cookies/cookies.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-nav',
@@ -18,9 +18,8 @@ export class NavComponent {
       map(result => result.matches)
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient,private userDetail:UserDetailService,private CookiesService:CookiesService) {
+  constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient,private userDetail:UserDetailService,private cookieService: CookieService) {
     this.userDetail.getuserDetail();
-    this.CookiesService.setCookie('ss','sss');
    }
 
    ImportPhotos(){
@@ -29,7 +28,7 @@ export class NavComponent {
     })
   }
   logout(){
-    this.CookiesService.deleteCookie('connect.sid');
+    this.cookieService.deleteAll();
   }
    
 }
