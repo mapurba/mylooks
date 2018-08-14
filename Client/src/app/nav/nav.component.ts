@@ -29,7 +29,7 @@ export class NavComponent {
     })
   }
   logout(){
-    //this.cookieService.deleteAll();
+    this.cookieService.delete('user');
     this.http.get('/api/logout').subscribe((res)=>{
       //  this.router.navigate(['/login']);
     });
