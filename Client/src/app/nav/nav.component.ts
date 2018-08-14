@@ -20,6 +20,7 @@ export class NavComponent {
 
   constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient,private userDetail:UserDetailService,private CookiesService:CookiesService) {
     this.userDetail.getuserDetail();
+    this.CookiesService.setCookie('ss','sss');
    }
 
    ImportPhotos(){
@@ -28,7 +29,7 @@ export class NavComponent {
     })
   }
   logout(){
-    this.CookiesService.eraseCookieFromAllPaths('');
+    this.CookiesService.deleteCookie('connect.sid');
   }
    
 }
