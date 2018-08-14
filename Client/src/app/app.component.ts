@@ -1,7 +1,6 @@
 import { Component ,OnInit} from '@angular/core';
 import { UserDetailService } from './shared/services/user-detail.service';
  import { Router } from '@angular/router';
-import { CookiesService } from 'src/app/shared/services/utilities/util_cookies/cookies.service';
 
 
 @Component({
@@ -12,7 +11,7 @@ import { CookiesService } from 'src/app/shared/services/utilities/util_cookies/c
 export class AppComponent implements OnInit{
   title = 'app';
 
-  constructor(private UserDetailService:UserDetailService,private router:Router,private cookiesService:CookiesService) {
+  constructor(private UserDetailService:UserDetailService,private router:Router) {
     // console.log(this.cookiesService.getCookie('connect/.sid'));
 
    }

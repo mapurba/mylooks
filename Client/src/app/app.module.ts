@@ -24,6 +24,17 @@ import { CookieService } from 'ngx-cookie-service';
 
 
 @NgModule({
+  providers: [
+    // WindowRefService,
+    CookieService,
+    DocumentRefService,
+    InterceptService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptService,
+      multi: true
+    },
+  ],
   declarations: [
     AppComponent,
     NavComponent,
@@ -52,17 +63,7 @@ import { CookieService } from 'ngx-cookie-service';
     HttpClientModule,
     MatMenuModule
   ],
-  providers: [
-    // WindowRefService,
-    DocumentRefService,
-    CookieService,
-    InterceptService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: InterceptService,
-      multi: true
-    },
-  ],
+  
   bootstrap: [AppComponent]
 })
 export class AppModule { }

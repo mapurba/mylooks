@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {DocumentRefService} from "../util_docRef/document-ref.service";
 
 @Injectable()
-export class CookiesService {
+export class CustomCookiesService {
 
   constructor(private documentRef: DocumentRefService) { }
 
