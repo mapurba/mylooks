@@ -9,9 +9,9 @@ import { DashBoardComponent } from 'src/app/dash-board/dash-board.component';
  
 const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuardService] },
-    { path: 'Dashboard', component: DashBoardComponent },
-    { path: 'home', component: HomeComponent },
-    { path: 'blog', component: BlogComponent },
+    { path: 'Dashboard', component: DashBoardComponent ,canActivate: [AuthGuardService]},
+    { path: 'home', component: HomeComponent,canActivate: [AuthGuardService] },
+    { path: 'blog', component: BlogComponent,canActivate: [AuthGuardService] },
     { path: 'login', component: LoginComponent },
  
     // otherwise redirect to home
