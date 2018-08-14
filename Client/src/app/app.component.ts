@@ -13,7 +13,7 @@ export class AppComponent implements OnInit{
   title = 'app';
 
   constructor(private UserDetailService:UserDetailService,private router:Router,private cookiesService:CookiesService) {
-    console.log(this.cookiesService.getCookie('connect'));
+    // console.log(this.cookiesService.getCookie('connect/.sid'));
 
    }
   
