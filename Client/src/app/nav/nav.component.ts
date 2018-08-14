@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { HttpClient } from '../../../node_modules/@angular/common/http';
 import { UserDetailService } from '../shared/services/user-detail.service';
 import { CookieService } from 'ngx-cookie-service';
+import { Router } from '../../../node_modules/@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -18,7 +19,7 @@ export class NavComponent {
       map(result => result.matches)
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient,private userDetail:UserDetailService,private cookieService: CookieService) {
+  constructor(private router:Router,private breakpointObserver: BreakpointObserver, private http: HttpClient,private userDetail:UserDetailService,private cookieService: CookieService) {
     this.userDetail.getuserDetail();
    }
 
@@ -30,8 +31,7 @@ export class NavComponent {
   logout(){
     //this.cookieService.deleteAll();
     this.http.get('/api/logout').subscribe((res)=>{
-      console.log(res);
-
+      this.router.navigateByUrl('/login');
     });
   }
    
