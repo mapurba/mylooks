@@ -10,7 +10,6 @@ export class AuthGuardService {
   constructor(private router: Router,private cookiesService:CookiesService) { }
  
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      console.log(this.cookiesService.getCookie('connect.sid'));
         if (this.cookiesService.getCookie('connect.sid')) {
             // logged in so return true
             return true;
