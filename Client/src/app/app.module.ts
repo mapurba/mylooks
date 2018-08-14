@@ -18,6 +18,7 @@ import { WindowRefService } from './shared/services/utilities/util_winRef/window
 import { LoginComponent } from './login/login.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { routing } from 'src/app/app.routing';
+import { CookieService } from 'ngx-cookie-service';
 
 
 
