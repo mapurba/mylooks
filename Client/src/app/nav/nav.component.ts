@@ -28,7 +28,7 @@ export class NavComponent {
     })
   }
   logout(){
-    this.cookieService.deleteAll();
+    //this.cookieService.deleteAll();
   }
    
 }
