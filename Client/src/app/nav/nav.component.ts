@@ -31,9 +31,9 @@ export class NavComponent {
   logout(){
     //this.cookieService.deleteAll();
     this.http.get('/api/logout').subscribe((res)=>{
-       this.router.navigate(['/login']);
-
+      //  this.router.navigate(['/login']);
     });
+    this.router.navigate(['/login']);
   }
    
 }
