@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
@@ -19,16 +18,10 @@ import { DocumentRefService } from './shared/services/utilities/util_docRef/docu
 import { WindowRefService } from './shared/services/utilities/util_winRef/window-ref.service';
 import { LoginComponent } from './login/login.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { routing } from 'src/app/app.routing';
 
 
-const appRoutes: Routes = [
-  { path: 'Dashboard', component: DashBoardComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'blog', component: BlogComponent },
-  { path: 'login', component: LoginComponent },
-  { path: '**', component: LoginComponent },
-  
-];
+
 
 @NgModule({
   declarations: [
@@ -43,9 +36,10 @@ const appRoutes: Routes = [
     BrowserModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
+    routing,
     LayoutModule,
-    FlexLayoutModule ,
-    RouterModule.forRoot(appRoutes),
+    FlexLayoutModule,
+    // RouterModule.forRoot(appRoutes),
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -56,22 +50,17 @@ const appRoutes: Routes = [
     MatGridListModule,
     MatTabsModule,
     HttpClientModule
-    
-    
   ],
   providers: [
     // WindowRefService,
     DocumentRefService,
     CookiesService,
     InterceptService,
-  
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptService,
       multi: true
     },
-    
-
   ],
   bootstrap: [AppComponent]
 })
