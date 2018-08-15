@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -6,6 +6,7 @@ import { HttpClient } from '../../../node_modules/@angular/common/http';
 import { UserDetailService } from '../shared/services/user-detail.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '../../../node_modules/@angular/router';
+import { Globals } from '../shared/services/globals';
 
 @Component({
   selector: 'app-nav',
@@ -19,7 +20,8 @@ export class NavComponent {
       map(result => result.matches)
     );
 
-  constructor(private router:Router,private breakpointObserver: BreakpointObserver, private http: HttpClient,private userDetail:UserDetailService,private cookieService: CookieService) {
+
+  constructor(private router:Router,private breakpointObserver: BreakpointObserver,private renderer: Renderer2, private http: HttpClient,private userDetail:UserDetailService,private cookieService: CookieService,private globals: Globals) {
     this.userDetail.getuserDetail();
    }
 
@@ -34,6 +36,11 @@ export class NavComponent {
       //  this.router.navigate(['/login']);
     });
     this.router.navigate(['/login']);
+  }
+  sidebarToggle(){
+    
+    this.globals.sivebarToggle=!this.globals.sivebarToggle;
+    this.globals.sivebarToggle?this.renderer.addClass(document.body, 'is-collapsed'):this.renderer.removeClass(document.body, 'is-collapsed');
   }
    
 }
