@@ -25,8 +25,8 @@ export class AppComponent implements OnInit{
 
   getuserDetail(){
     this.UserDetailService.getuserDetail().subscribe((res)=>{
-     console.log(res);
-     this.router.navigate(['/Dashboard']);
+    // console.log(res);
+    // this.router.navigate(['/Dashboard']);
     },err=>{
 
     });
