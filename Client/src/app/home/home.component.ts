@@ -6,7 +6,7 @@ import {  DragScrollComponent } from 'ngx-drag-scroll';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  styleUrls: ['./home.component.scss'],
   viewProviders: [MatIconRegistry]
 })
 export class HomeComponent implements OnInit {
