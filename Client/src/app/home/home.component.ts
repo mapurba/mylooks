@@ -47,7 +47,9 @@ export class HomeComponent implements OnInit {
 
 
   ngOnInit() {
+    this.getDirection();
   }
+
 
   clickItem(item) {
     console.log('item clicked');
@@ -90,5 +92,27 @@ export class HomeComponent implements OnInit {
   onSnapAnimationFinished() {
     console.log('snap animation finished');
   }
+
+
+  lat: Number = 24.799448
+  lng: Number = 120.979021
+
+  origin: {}
+  destination: {}
+
+  
+
+  getDirection() {
+
+    // origin: LatLng | String | google.maps.Place,
+
+    this.origin = { lat: 12.995276, lng:77.683971 }
+    this.destination = { lat:12.946277, lng:77.680180 }
+
+    // this.origin = 'Taipei Main Station'
+    // this.destination = 'Taiwan Presidential Office'
+
+  }
+
 
 }

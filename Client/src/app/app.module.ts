@@ -22,7 +22,8 @@ import { routing } from 'src/app/app.routing';
 import { CookieService } from 'ngx-cookie-service';
 import { DragScrollModule } from 'ngx-drag-scroll';
 import { Globals } from './shared/services/globals';
-
+import { AgmCoreModule } from '@agm/core';            // @agm/core
+import { AgmDirectionModule } from 'agm-direction'; 
 
 
 
@@ -52,6 +53,10 @@ import { Globals } from './shared/services/globals';
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
     routing,
+    AgmCoreModule.forRoot({ // @agm/core
+      apiKey: 'AIzaSyBQEjefPCTAOXfzaGTUrahRXUQ-LYMX7vs',
+    }),
+    AgmDirectionModule,
     LayoutModule,
     MDBBootstrapModule.forRoot(),
     FlexLayoutModule,

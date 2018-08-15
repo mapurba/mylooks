@@ -12,6 +12,7 @@
   },
   "private": true,
   "dependencies": {
+    "@agm/core": "^1.0.0-beta.3",
     "@angular/animations": "^6.0.3",
     "@angular/cdk": "^6.2.0",
     "@angular/common": "^6.0.3",
@@ -28,6 +29,7 @@
     "@angular/service-worker": "^6.0.3",
     "@swimlane/ngx-charts": "^9.0.0",
     "@types/chart.js": "^2.7.30",
+    "agm-direction": "^0.6.0",
     "angular-bootstrap-md": "^6.2.2",
     "angular5-csv": "^0.2.10",
     "bootstrap": "^4.1.3",

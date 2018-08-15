@@ -7,5 +7,8 @@
 @import '../node_modules/perfect-scrollbar/css/perfect-scrollbar.css';
 
 // html, body { height: 100%; }
-body { background-color: #f9fafb !important;}
+body { background-color:white !important;}
 
+.bgc-white{
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);}
