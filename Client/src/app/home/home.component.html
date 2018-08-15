@@ -1,6 +1,22 @@
 <div class="content">
   <p class="title">Let's change you looks </p>
   <div class="demo-border">
+    <drag-scroll class="demo-two"
+        [scrollbar-hidden]="hideScrollbar"
+        [drag-scroll-disabled]="disabled"
+        [drag-scroll-x-disabled]="xDisabled"
+        [drag-scroll-y-disabled]="yDisabled"
+      >
+      <img drag-scroll-item src='https://bfwg.github.io/ngx-drag-scroll/assets/img/leia.png' />
+      <img drag-scroll-item src='https://bfwg.github.io/ngx-drag-scroll/assets/img/varder.png' />
+
+    </drag-scroll>
+  </div>
+
+
+  <p class="title">Recent Models </p>
+
+  <div class="demo-border">
     <drag-scroll class="demo-one"
       drag-scroll-y-disabled="true"
       scrollbar-hidden="true"
