@@ -31,6 +31,7 @@
     "font-awesome": "^4.7.0",
     "http-server": "^0.11.1",
     "ngx-cookie-service": "^1.0.10",
+    "ngx-drag-scroll": "^2.0.0-beta.4",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },

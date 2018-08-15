@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatGridListModule, MatCardModule, MatTabsModule, MatMenuModule } from '@angular/material';
+import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatGridListModule, MatCardModule, MatTabsModule, MatMenuModule, MatSlideToggleModule } from '@angular/material';
 import { DashBoardComponent } from './dash-board/dash-board.component';
 import { BlogComponent } from './blog/blog.component';
 import { HomeComponent } from './home/home.component';
@@ -19,6 +19,7 @@ import { LoginComponent } from './login/login.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { routing } from 'src/app/app.routing';
 import { CookieService } from 'ngx-cookie-service';
+import { DragScrollModule } from 'ngx-drag-scroll';
 
 
 
@@ -59,8 +60,10 @@ import { CookieService } from 'ngx-cookie-service';
     MatGridListModule,
     MatCardModule,
     MatGridListModule,
+    MatSlideToggleModule,
     MatTabsModule,
     HttpClientModule,
+    DragScrollModule,
     MatMenuModule
   ],
   
