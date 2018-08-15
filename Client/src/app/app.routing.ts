@@ -11,7 +11,7 @@ const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuardService] },
     { path: 'Dashboard', component: DashBoardComponent ,canActivate: [AuthGuardService]},
     { path: 'home', component: HomeComponent,canActivate: [AuthGuardService] },
-    { path: 'blog', component: BlogComponent,canActivate: [AuthGuardService] },
+    { path: 'admin', component: BlogComponent,canActivate: [AuthGuardService] },
     { path: 'login', component: LoginComponent },
  
     // otherwise redirect to home

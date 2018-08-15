@@ -14,16 +14,17 @@ import { Globals } from '../shared/services/globals';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent {
-
+  userDetail:any;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches)
     );
 
 
-  constructor(private router:Router,private breakpointObserver: BreakpointObserver,private renderer: Renderer2, private http: HttpClient,private userDetail:UserDetailService,private cookieService: CookieService,private globals: Globals) {
-    this.userDetail.getuserDetail();
-   }
+  constructor(private router:Router,private breakpointObserver: BreakpointObserver,private renderer: Renderer2, private http: HttpClient,private userDetailService:UserDetailService,private cookieService: CookieService,private globals: Globals ) {
+    // this.userDetail.getuserDetail();
+    this.getuserDetail();
+     }
 
    ImportPhotos(){
     this.http.get('/api/api/importInstagramPhotos').subscribe((res)=>{
@@ -43,4 +44,11 @@ export class NavComponent {
     this.globals.sivebarToggle?this.renderer.addClass(document.body, 'is-collapsed'):this.renderer.removeClass(document.body, 'is-collapsed');
   }
    
+  getuserDetail(){
+    this.userDetailService.getuserDetail().subscribe((res)=>{
+     this.userDetail=res;
+    },err=>{
+ 
+    });
+   }
 }
