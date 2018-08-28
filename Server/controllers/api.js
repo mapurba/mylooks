@@ -1,6 +1,7 @@
 const graph = require('fbgraph');
 const UserAllMedia = require('../models/UserAllMedia');
 const InstagramPhotos = require('../models/InstagramPhotos');
+const AdminTask = require('../models/AdminTask');
 
 
 /**
@@ -103,6 +104,35 @@ exports.getAllPhotos = (req, res) => {
     InstagramPhotos.find({}).then((result) => {
         if (result) {
             res.status(200).send(result);
+        } else {
+            res.status(200).send([]);
+        }
+    }, (err) => {
+        res.status(489).send(err);
+
+    })
+
+};
+
+exports.getAllAdminTask = (req, res) => {
+
+    AdminTask.find({}).then((result) => {
+        if (result) {
+            res.status(200).send(result);
+        } else {
+            res.status(200).send([]);
+        }
+    }, (err) => {
+        res.status(489).send(err);
+
+    })
+
+};
+exports.deleteAdminTask = (req, res) => {
+
+    AdminTask.deleteMany({}).then((result) => {
+        if (result) {
+            res.status(200).send([{'result':'sucess'}]);
         } else {
             res.status(200).send([]);
         }

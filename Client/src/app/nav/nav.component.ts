@@ -40,8 +40,8 @@ export class NavComponent {
   }
   sidebarToggle(){
     
-    this.globals.sivebarToggle=!this.globals.sivebarToggle;
-    this.globals.sivebarToggle?this.renderer.addClass(document.body, 'is-collapsed'):this.renderer.removeClass(document.body, 'is-collapsed');
+    // this.globals.sivebarToggle=!this.globals.sivebarToggle;
+    // this.globals.sivebarToggle?this.renderer.addClass(document.body, 'is-collapsed'):this.renderer.removeClass(document.body, 'is-collapsed');
   }
    
   getuserDetail(){

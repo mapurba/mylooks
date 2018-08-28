@@ -8,7 +8,7 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavComponent } from './nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatGridListModule, MatCardModule, MatTabsModule, MatMenuModule, MatSlideToggleModule } from '@angular/material';
+import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatGridListModule, MatCardModule, MatTabsModule, MatMenuModule, MatSlideToggleModule, MatButtonToggleModule, MatDialogModule, MatInputModule, MatTableModule } from '@angular/material';
 import { DashBoardComponent } from './dash-board/dash-board.component';
 import { BlogComponent } from './blog/blog.component';
 import { HomeComponent } from './home/home.component';
@@ -25,6 +25,8 @@ import { Globals } from './shared/services/globals';
 import { AgmCoreModule } from '@agm/core';            // @agm/core
 import { AgmDirectionModule } from 'agm-direction'; 
 
+import {MatSnackBarModule} from '@angular/material';
+import { DialogOverviewExampleDialog } from './alert/alert.component';
 
 
 @NgModule({
@@ -46,6 +48,7 @@ import { AgmDirectionModule } from 'agm-direction';
     DashBoardComponent,
     BlogComponent,
     HomeComponent,
+    DialogOverviewExampleDialog,
     LoginComponent
   ],
   imports: [
@@ -53,9 +56,9 @@ import { AgmDirectionModule } from 'agm-direction';
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
     routing,
-    AgmCoreModule.forRoot({ // @agm/core
-      apiKey: 'AIzaSyBQEjefPCTAOXfzaGTUrahRXUQ-LYMX7vs',
-    }),
+    // AgmCoreModule.forRoot({ // @agm/core
+    //   apiKey: 'AIzaSyBQEjefPCTAOXfzaGTUrahRXUQ-LYMX7vs',
+    // }),
     AgmDirectionModule,
     LayoutModule,
     MDBBootstrapModule.forRoot(),
@@ -73,10 +76,17 @@ import { AgmDirectionModule } from 'agm-direction';
     MatTabsModule,
     HttpClientModule,
     DragScrollModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    MatButtonToggleModule,
+    MatInputModule,
+    MatTableModule
+    
   ],
   schemas: [ NO_ERRORS_SCHEMA ],
-  
+  entryComponents: [ DialogOverviewExampleDialog],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

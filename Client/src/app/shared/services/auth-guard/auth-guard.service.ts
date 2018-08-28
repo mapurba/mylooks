@@ -11,7 +11,7 @@ export class AuthGuardService {
  
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
       
-     console.log( this.CookieService.get('user'));
+    //  console.log( this.CookieService.get('user'));
         if (this.CookieService.get('user')) {
             // logged in so return true
             return true;

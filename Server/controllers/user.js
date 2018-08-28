@@ -1,10 +1,11 @@
-const {promisify} = require('util');
+const { promisify } = require('util');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../models/User');
 const InstagramPhotos = require('../models/InstagramPhotos');
 const UserAllMedia = require('../models/UserAllMedia');
+const AdminTask = require('../models/AdminTask');
 
 const randomBytesAsync = promisify(crypto.randomBytes);
 
@@ -16,7 +17,7 @@ exports.getLogin = (req, res) => {
     if (req.user) {
         return res.redirect('http://localhost:4200/Dashboard');
     }
-    else{
+    else {
         return res.redirect('http://localhost:4200/Login');
 
     }
@@ -29,7 +30,7 @@ exports.getLogin = (req, res) => {
 exports.postLogin = (req, res, next) => {
     req.assert('email', 'Email is not valid').isEmail();
     req.assert('password', 'Password cannot be blank').notEmpty();
-    req.sanitize('email').normalizeEmail({gmail_remove_dots: false});
+    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
     const errors = req.validationErrors();
 
@@ -50,7 +51,7 @@ exports.postLogin = (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            req.flash('success', {msg: 'Success! You are logged in.'});
+            req.flash('success', { msg: 'Success! You are logged in.' });
             res.redirect(req.session.returnTo || '/');
         });
     })(req, res, next);
@@ -90,7 +91,7 @@ exports.postSignup = (req, res, next) => {
     req.assert('email', 'Email is not valid').isEmail();
     req.assert('password', 'Password must be at least 4 characters long').len(4);
     req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
-    req.sanitize('email').normalizeEmail({gmail_remove_dots: false});
+    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
     const errors = req.validationErrors();
 
@@ -104,12 +105,12 @@ exports.postSignup = (req, res, next) => {
         password: req.body.password
     });
 
-    User.findOne({email: req.body.email}, (err, existingUser) => {
+    User.findOne({ email: req.body.email }, (err, existingUser) => {
         if (err) {
             return next(err);
         }
         if (existingUser) {
-            req.flash('errors', {msg: 'Account with that email address already exists.'});
+            req.flash('errors', { msg: 'Account with that email address already exists.' });
             return res.redirect('/signup');
         }
         user.save((err) => {
@@ -149,7 +150,7 @@ exports.getAccountDetail = (req, res) => {
  */
 exports.postUpdateProfile = (req, res, next) => {
     req.assert('email', 'Please enter a valid email address.').isEmail();
-    req.sanitize('email').normalizeEmail({gmail_remove_dots: false});
+    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
     const errors = req.validationErrors();
 
@@ -170,12 +171,12 @@ exports.postUpdateProfile = (req, res, next) => {
         user.save((err) => {
             if (err) {
                 if (err.code === 11000) {
-                    req.flash('errors', {msg: 'The email address you have entered is already associated with an account.'});
+                    req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
                     return res.redirect('/account');
                 }
                 return next(err);
             }
-            req.flash('success', {msg: 'Profile information has been updated.'});
+            req.flash('success', { msg: 'Profile information has been updated.' });
             res.redirect('/account');
         });
     });
@@ -205,7 +206,7 @@ exports.postUpdatePassword = (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            req.flash('success', {msg: 'Password has been changed.'});
+            req.flash('success', { msg: 'Password has been changed.' });
             res.redirect('/account');
         });
     });
@@ -216,12 +217,12 @@ exports.postUpdatePassword = (req, res, next) => {
  * Delete user account.
  */
 exports.postDeleteAccount = (req, res, next) => {
-    User.remove({_id: req.user.id}, (err) => {
+    User.remove({ _id: req.user.id }, (err) => {
         if (err) {
             return next(err);
         }
         req.logout();
-        req.flash('info', {msg: 'Your account has been deleted.'});
+        req.flash('info', { msg: 'Your account has been deleted.' });
         res.redirect('/');
     });
 };
@@ -231,39 +232,68 @@ exports.postDeleteAccount = (req, res, next) => {
  * Post User Photos.
  */
 exports.importUserPhotos = (req, res, next) => {
+    let request_object = req.body, failed = passed = 0;
+    for (const photos of req.body) {
+        if (request_object instanceof Array) {
+            for (let i = 0; i < request_object.length; i++) {
+                const newInstagramPhotos = new InstagramPhotos({
+                    caption: request_object[i].caption,
+                    _id: request_object[i]._id,
+                    facebookId: req.user.facebook,
+                    like_count: request_object[i].like_count,
+                    media_type: request_object[i].media_type,
+                    media_url: request_object[i].media_url,
+                    permalink: request_object[i].permalink,
+                    username: request_object[i].username,
+                });
+                InstagramPhotos.findOne({ _id: request_object[i]._id }).then((existingPhoto) => {
+                    if (!existingPhoto) {
+                        let savephote = newInstagramPhotos.save();
+                        let updateuserphoto = UserAllMedia.findOneAndUpdate({ _id: request_object[i]._id }, { sendForReview: true }, { overwrite: true });
+                        Promise.all([savephote,updateuserphoto]).then((response) => {
+                            console.log('added new instagram photo');
+                            passed++;
+                        }).catch((err) => {
+                            failed++;
+                            console.error('db operation failed while insrerting photos send by user : ', err);
+                        });
+                    }
+                });
 
-    const newInstagramPhotos = new InstagramPhotos({
-        caption: req.body.caption,
-        _id: req.body._id,
-        facebookId: req.user.facebook,
-        like_count: req.body.like_count,
-        media_type: req.body.media_type,
-        media_url: req.body.media_url,
-        permalink: req.body.permalink,
-        username: req.body.username,
-    });
-
-    InstagramPhotos.findOne({_id: req.body._id}).then((existingPhoto) => {
-        if (!existingPhoto) {
-            let savephote = newInstagramPhotos.save();
-            let updateuserphoto = UserAllMedia.findOneAndUpdate({_id: req.body._id}, {sendForReview: true}, {overwrite: true});
-            Promise.all([savephote, updateuserphoto]).then((response) => {
-                res.status(200).send('photo send for review');
-            }).catch((err) => {
-                res.status(489).send(err);
-            })
-        }
-        else {
-            if (req.user.isAdmin) {
-                res.status(489).send('Admin Update Not Allowwed');
-            } else {
-                res.status(489).send('Update Not Allowwed');
             }
+            if (failed <= 0) {
+
+                newAdminTask(req,res,req.user,request_object);
+                
+            }
+            else {
+                res.status(489).send({ "failed": failed, "passed": passed });
+            }
+        } else {
+            res.status(489).send('Invalid Input');
         }
+
+    }
+
+
+}
+
+newAdminTask=(req,res,user,request_object)=>{
+    const adminTask =new AdminTask({user:user,userMedia:request_object});
+    adminTask.save((err) => {
+        if (err) {
+            //return next(err);
+            console.log('error while creating admin task');
+            res.status(489).send({ err: "err posting  photos" });
+
+            
+        }
+        console.log('added new admin task');
+        res.status(200).send({ success: "sucessfully posted  photos" });
 
 
     });
-
+// console.log(user);
 }
 
 
@@ -274,13 +304,13 @@ exports.importUserPhotos = (req, res, next) => {
  */
 exports.getAllUnSubmitedPhotos = (req, res, next) => {
 
-    UserAllMedia.find({facebookId: req.user.facebook}).then((result) => {
+    UserAllMedia.find({ facebookId: req.user.facebook }).then((result) => {
         res.status(200).send(result);
 
     }).catch((err) => {
         res.status(489).send(err);
 
-    })
+    });
 
 
 };
@@ -291,7 +321,7 @@ exports.getAllUnSubmitedPhotos = (req, res, next) => {
  * Unlink OAuth provider.
  */
 exports.getOauthUnlink = (req, res, next) => {
-    const {provider} = req.params;
+    const { provider } = req.params;
     User.findById(req.user.id, (err, user) => {
         if (err) {
             return next(err);
@@ -302,7 +332,7 @@ exports.getOauthUnlink = (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            req.flash('info', {msg: `${provider} account has been unlinked.`});
+            req.flash('info', { msg: `${provider} account has been unlinked.` });
             res.redirect('/account');
         });
     });
@@ -317,14 +347,14 @@ exports.getReset = (req, res, next) => {
         return res.redirect('/');
     }
     User
-        .findOne({passwordResetToken: req.params.token})
+        .findOne({ passwordResetToken: req.params.token })
         .where('passwordResetExpires').gt(Date.now())
         .exec((err, user) => {
             if (err) {
                 return next(err);
             }
             if (!user) {
-                req.flash('errors', {msg: 'Password reset token is invalid or has expired.'});
+                req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
                 return res.redirect('/forgot');
             }
             res.render('account/reset', {
@@ -350,11 +380,11 @@ exports.postReset = (req, res, next) => {
 
     const resetPassword = () =>
         User
-            .findOne({passwordResetToken: req.params.token})
+            .findOne({ passwordResetToken: req.params.token })
             .where('passwordResetExpires').gt(Date.now())
             .then((user) => {
                 if (!user) {
-                    req.flash('errors', {msg: 'Password reset token is invalid or has expired.'});
+                    req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
                     return res.redirect('back');
                 }
                 user.password = req.body.password;
@@ -389,7 +419,7 @@ exports.postReset = (req, res, next) => {
         };
         return transporter.sendMail(mailOptions)
             .then(() => {
-                req.flash('success', {msg: 'Success! Your password has been changed.'});
+                req.flash('success', { msg: 'Success! Your password has been changed.' });
             });
     };
 
@@ -420,7 +450,7 @@ exports.getForgot = (req, res) => {
  */
 exports.postForgot = (req, res, next) => {
     req.assert('email', 'Please enter a valid email address.').isEmail();
-    req.sanitize('email').normalizeEmail({gmail_remove_dots: false});
+    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
     const errors = req.validationErrors();
 
@@ -434,10 +464,10 @@ exports.postForgot = (req, res, next) => {
 
     const setRandomToken = token =>
         User
-            .findOne({email: req.body.email})
+            .findOne({ email: req.body.email })
             .then((user) => {
                 if (!user) {
-                    req.flash('errors', {msg: 'Account with that email address does not exist.'});
+                    req.flash('errors', { msg: 'Account with that email address does not exist.' });
                 } else {
                     user.passwordResetToken = token;
                     user.passwordResetExpires = Date.now() + 3600000; // 1 hour
@@ -469,7 +499,7 @@ exports.postForgot = (req, res, next) => {
         };
         return transporter.sendMail(mailOptions)
             .then(() => {
-                req.flash('info', {msg: `An e-mail has been sent to ${user.email} with further instructions.`});
+                req.flash('info', { msg: `An e-mail has been sent to ${user.email} with further instructions.` });
             });
     };
 
