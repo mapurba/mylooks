@@ -1,0 +1,45 @@
+<h1 mat-dialog-title>
+    Add Product To Photo
+</h1>
+<div mat-dialog-content>
+    <mat-grid-list cols="2" rowHeight="1cs:1">
+        <mat-grid-tile><mat-card class="example-card">
+        
+            <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+            
+          </mat-card></mat-grid-tile>
+        <mat-grid-tile>2</mat-grid-tile>
+       
+      </mat-grid-list>
+    
+  <!-- <p>Products.</p>
+  <div>
+
+    <mat-card-header>
+
+      <img mat-card-avatar  src="https://graph.facebook.com/10204963589045565/picture?type=large">
+      <img mat-card-avatar src="https://graph.facebook.com/10204963589045565/picture?type=large">
+      <img mat-card-avatar src="https://graph.facebook.com/10204963589045565/picture?type=large">
+
+    </mat-card-header>
+  </div>
+
+  <div class="product_detail">
+    <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Favorite food" value="Sushi">
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <textarea matInput placeholder="Leave a comment"></textarea>
+      </mat-form-field>
+    </form>
+  </div> -->
+
+
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
+</div>
