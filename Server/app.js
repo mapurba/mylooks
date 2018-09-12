@@ -165,9 +165,9 @@ app.get('/api', apiController.getApi);
 app.get('/api/importInstagramPhotos', passportConfig.isAuthenticated,  apiController.getFacebook);
 
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }));
-app.get('/auth/facebook/callback',passport.authenticate('facebook',{ failureRedirect: 'https://buymylooks.westeurope.cloudapp.azure.com/login' }), (req, res) => {
+app.get('/auth/facebook/callback',passport.authenticate('facebook',{ failureRedirect: process.env.FACEBOOK_REDIRECT_URL }), (req, res) => {
   res.cookie('user',req.user._id);
-  res.redirect('https://buymylooks.westeurope.cloudapp.azure.com/');
+  res.redirect(process.env.FACEBOOK_REDIRECT_URL);
 });
 
 app.get('/admin', apiController.getApi);
