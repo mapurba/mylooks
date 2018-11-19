@@ -2,8 +2,8 @@ const graph = require('fbgraph');
 const UserAllMedia = require('../models/UserAllMedia');
 const InstagramPhotos = require('../models/InstagramPhotos');
 const AdminTask = require('../models/AdminTask');
-
-
+var Jimp = require('jimp');
+const Utils = require('../util/util.js')
 /**
  * GET /api
  * List of API examples.
@@ -44,6 +44,9 @@ getInstagramMediaToUrl = (req, res, next, instagramBusinessAccountId) => {
 }
 
 
+
+
+
 /**
  * POST /account/importUserPhotos
  * Post User Photos.
@@ -52,8 +55,40 @@ saveUserMediaLiks = (req, res, next, data) => {
     let allMedia = []
 
     data.data.forEach((media) => {
+        var counter = 0;
 
-        allMedia.push(createMedia(media, req.user.facebook));
+        Jimp.read(media.media_url)
+            .then(image => {
+                // Do stuff with the image.
+                // counter++;
+                image
+                    .resize(256, 256) // resize
+                    .quality(100) // set JPEG quality
+                    .getBase64(Jimp.MIME_JPEG, (err, res) => {
+                        // console.log(res)
+                        if(err){
+                            console.log(err);
+                        }
+                        if(!err){
+                            var temp = media;
+                            temp.image = res;
+                            ++counter;
+                            if(counter<=1)
+                            // console.log( temp.image);
+                            // console.log('-------------------\n');
+                            allMedia.push(createMedia(temp, req.user.facebook));
+                        }
+                       
+                    });
+
+            })
+            .catch(err => {
+                // Handle an exception.
+                console.log('image upload error');
+                console.log(err);
+            });
+
+        // allMedia.push(createMedia(media, req.user.facebook));
 
 
     })
@@ -62,11 +97,14 @@ saveUserMediaLiks = (req, res, next, data) => {
             console.log(data);
             res.status(200).send('successfully impoted all the photos');
         }).catch((err) => {
-        res.status(489).send('failed import photos')
-    });
+            res.status(489).send('failed import photos')
+        });
 }
 
 createMedia = async (mediaObject, userId) => {
+    if (mediaObject.image) {
+        //console.log(mediaObject.image)
+    }
     const userAllMedia = new UserAllMedia({
         facebookId: userId,
         media_url: mediaObject.media_url,
@@ -74,20 +112,27 @@ createMedia = async (mediaObject, userId) => {
         like_count: mediaObject.like_count,
         datePosted: mediaObject.timestamp,
         caption: mediaObject.caption,
-        _id: mediaObject.id
+        _id: mediaObject.id,
+        image: mediaObject.image
     });
 
-    return UserAllMedia.findOne({_id: mediaObject.id})
+    return UserAllMedia.findOne({
+            _id: mediaObject.id
+        })
         .then(existingMedia => {
             if (!existingMedia) {
-                return userAllMedia.save();
+                return userAllMedia.save((res) => {}, (err) => {
+                    //console.log(err);
+                });
             } else {
+
                 return Promise.resolve(true);
             }
             // return
 
         })
         .catch(err => {
+            console.log(err);
             return Promise.reject(err);
         })
 
@@ -132,7 +177,9 @@ exports.deleteAdminTask = (req, res) => {
 
     AdminTask.deleteMany({}).then((result) => {
         if (result) {
-            res.status(200).send([{'result':'sucess'}]);
+            res.status(200).send([{
+                'result': 'sucess'
+            }]);
         } else {
             res.status(200).send([]);
         }
@@ -182,4 +229,3 @@ exports.getFacebook = (req, res, next) => {
 //     });
 //   });
 // };
-
