@@ -17,7 +17,6 @@ import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '../../node_modu
 import { DocumentRefService } from './shared/services/utilities/util_docRef/document-ref.service';
 // import { WindowRefService } from './shared/services/utilities/util_winRef/window-ref.service';
 import { LoginComponent } from './login/login.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { routing } from 'src/app/app.routing';
 import { CookieService } from 'ngx-cookie-service';
 import { DragScrollModule } from 'ngx-drag-scroll';
@@ -62,7 +61,7 @@ import { DialogOverviewExampleDialog } from './alert/alert.component';
     AgmDirectionModule,
     LayoutModule,
     MDBBootstrapModule.forRoot(),
-    FlexLayoutModule,
+    
     // RouterModule.forRoot(appRoutes),
     MatToolbarModule,
     MatButtonModule,
