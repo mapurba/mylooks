@@ -8,17 +8,18 @@
     <input type="text" placeholder="Search">
   </div>
   <div class="navigation__icons">
-    <a href="explore.html" class="navigation__link">
-      <i class="fa fa-compass"></i>
-    </a>
     <a href="#" class="navigation__link">
       <i class="fa fa-heart-o"></i>
     </a>
     <a [routerLink]="['/profile']"  class="navigation__link">
       <i class="fa fa-user-o"></i>
     </a>
-    <a  href="/api/auth/facebook" class="navigation__link">
+
+    <button   href="/api/auth/facebook"  class="loginBtn loginBtn--facebook navigation__link">
       Login
-    </a>
+    </button>
+    <!-- <a  href="/api/auth/facebook" class="navigation__link">
+      <img src="assets/images/fblogin.png" alt="Login with Facebook" title="Login with Facebook" width="150px" class="navigation__logo" >
+    </a> -->
   </div>
 </nav>
