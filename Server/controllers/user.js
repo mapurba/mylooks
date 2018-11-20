@@ -257,62 +257,75 @@ exports.postDeleteAccount = (req, res, next) => {
 exports.importUserPhotos = (req, res, next) => {
     let request_object = req.body,
         failed = passed = 0;
-    for (const photos of req.body) {
-        if (request_object instanceof Array) {
-            for (let i = 0; i < request_object.length; i++) {
-                const newInstagramPhotos = new InstagramPhotos({
-                    caption: request_object[i].caption,
-                    _id: request_object[i]._id,
-                    facebookId: req.user.facebook,
-                    like_count: request_object[i].like_count,
-                    media_type: request_object[i].media_type,
-                    media_url: request_object[i].media_url,
-                    permalink: request_object[i].permalink,
-                    username: request_object[i].username,
-                });
-                InstagramPhotos.findOne({
-                    _id: request_object[i]._id
-                }).then((existingPhoto) => {
-                    if (!existingPhoto) {
-                        let savephote = newInstagramPhotos.save();
-                        let updateuserphoto = UserAllMedia.findOneAndUpdate({
-                            _id: request_object[i]._id
-                        }, {
+    // for (const photos of req.body) {
+    // console.log(photos);
+    if (request_object instanceof Array) {
+        for (let i = 0; i < request_object.length; i++) {
+            const newInstagramPhotos = new InstagramPhotos({
+                caption: request_object[i].caption,
+                _id: request_object[i]._id,
+                facebookId: req.user.facebook,
+                like_count: request_object[i].like_count,
+                media_type: request_object[i].media_type,
+                media_url: request_object[i].media_url,
+                permalink: request_object[i].permalink,
+                username: request_object[i].username,
+            });
+            InstagramPhotos.findOne({
+                _id: request_object[i]._id
+            }).then((existingPhoto) => {
+                if (!existingPhoto) {
+                    let savephote = newInstagramPhotos.save();
+
+                    let updateuserphoto = UserAllMedia.findOneAndUpdate({
+                        _id: request_object[i]._id
+                    }, {
+                        $set: {
                             sendForReview: true
-                        }, {
-                            overwrite: true
+                        }
+                    }, {
+                        new: true
+                    });
+                    console.log('hi')
+                    Promise.all([savephote, updateuserphoto]).then((response) => {
+                        console.log('added new instagram photo');
+                        passed++;
+                        newAdminTask(req, res, req.user, request_object);
+                    }).catch((err) => {
+                        failed++;
+                        console.error('db operation failed while insrerting photos send by user : ', err);
+                        res.status(489).send({
+                            "failed": failed,
+                            "passed": passed
                         });
-                        Promise.all([savephote, updateuserphoto]).then((response) => {
-                            console.log('added new instagram photo');
-                            passed++;
-                        }).catch((err) => {
-                            failed++;
-                            console.error('db operation failed while insrerting photos send by user : ', err);
-                        });
-                    }
-                });
+                    });
+                }
+            });
 
-            }
-            if (failed <= 0) {
-
-                newAdminTask(req, res, req.user, request_object);
-
-            } else {
-                res.status(489).send({
-                    "failed": failed,
-                    "passed": passed
-                });
-            }
-        } else {
-            res.status(489).send('Invalid Input');
         }
+        // if (failed <= 0) {
 
+        //     newAdminTask(req, res, req.user, request_object);
+
+        // } else {
+        //     res.status(489).send({
+        //         "failed": failed,
+        //         "passed": passed
+        //     });
+        // }
+    } else {
+        res.status(489).send('Invalid Input');
     }
-
 
 }
 
+
+
+
+
+
 newAdminTask = (req, res, user, request_object) => {
+    console.log('admin')
     const adminTask = new AdminTask({
         user: user,
         userMedia: request_object
@@ -343,11 +356,12 @@ newAdminTask = (req, res, user, request_object) => {
  * get all  User Photos.
  * #todo crate proper index
  */
-exports.getAllUnSubmitedPhotos = (req, res, next) => {
+exports.getAllPhotos = (req, res, next) => {
 
     UserAllMedia.find({
         facebookId: req.user.facebook
     }).then((result) => {
+        console.log(result.length);
         res.status(200).send(result);
 
     }).catch((err) => {

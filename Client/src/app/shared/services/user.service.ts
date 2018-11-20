@@ -20,6 +20,18 @@ export class UserService {
 
 
   importPhotos(): Observable<any> {
-    return this.http.get('/api//api/importInstagramPhotos');
+    return this.http.get('/api/api/importInstagramPhotos');
+  }
+
+  reviewPhoto(publishPhotoList:any) {
+
+
+    let tempPayload =[];
+     publishPhotoList.forEach(element => {
+       element.sendForReview=true;
+      tempPayload.push(element);
+    });
+    return this.http.post('/api/account/importPhotosFromInstagram', tempPayload);
+
   }
 }

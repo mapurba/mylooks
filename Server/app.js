@@ -154,7 +154,7 @@ app.post('/account/delete', passportConfig.isAuthenticated, userController.postD
 app.post('/account/importPhotosFromInstagram', passportConfig.isAuthenticated, userController.importUserPhotos);
 
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
-app.get('/account/getAllUnSubmitedPhotos', passportConfig.isAuthenticated, userController.getAllUnSubmitedPhotos);
+app.get('/account/getAllUnSubmitedPhotos', passportConfig.isAuthenticated, userController.getAllPhotos);
 app.get('/account/myblog/:userId', homeController.getUserBlog);
 
 /**
