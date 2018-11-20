@@ -361,7 +361,7 @@ exports.getAllPhotos = (req, res, next) => {
     UserAllMedia.find({
         facebookId: req.user.facebook
     }).then((result) => {
-        console.log(result.length);
+        console.log(result.length); 
         res.status(200).send(result);
 
     }).catch((err) => {
