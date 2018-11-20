@@ -24,7 +24,7 @@ import { APP_BASE_HREF } from '@angular/common';
   ],
   providers: [
     InterceptService,
-    { provide: APP_BASE_HREF, useValue : '/#/' },
+    { provide: APP_BASE_HREF, useValue : '/' },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptService,
