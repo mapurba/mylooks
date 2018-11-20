@@ -16,13 +16,13 @@ export class ProfileComponent implements OnInit {
 
 
     this.getUserDetail();
-    this.getAllPostedPhotos();
+    this.getAllUnPostedPhotos();
 
     this.publishPhotoList = new Map();
 
   }
 
-  getAllPostedPhotos() {
+  getAllUnPostedPhotos() {
     this.userService.getAllUnSubmitedPhotos().subscribe((res) => {
       this.userPhotos = res;
     });
@@ -38,7 +38,7 @@ export class ProfileComponent implements OnInit {
   getUserDetail() {
     this.userService.getUserDetail().subscribe((res) => {
       this.userDetail = res;
-      console.table(res);
+     // console.table(res);
     })
   }
 
@@ -48,8 +48,11 @@ export class ProfileComponent implements OnInit {
   }
 
   addPhotoToList(item, $event) {
+    let tempitem= Object.assign({},item);
+    tempitem.image="";
     if( $event.target.checked){
-      this.publishPhotoList.set(item._id,item);
+      
+      this.publishPhotoList.set(item._id,tempitem);
     }
     else{
       this.publishPhotoList.delete(item._id);
@@ -60,7 +63,8 @@ export class ProfileComponent implements OnInit {
   publish(){
 
     this.userService.reviewPhoto(this.publishPhotoList).subscribe((res)=>{
-      console.log(res);
+    //  console.log(res);
+      this.getAllUnPostedPhotos();
     })
   }
   
