@@ -8,6 +8,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { routing } from './app.router';
 import { InterceptService } from './shared/services/http.interceptor.service';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { APP_BASE_HREF } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common
   ],
   providers: [
     InterceptService,
+    { provide: APP_BASE_HREF, useValue : '/#/' },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptService,
