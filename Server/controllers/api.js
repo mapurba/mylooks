@@ -113,7 +113,7 @@ createMedia = async (mediaObject, userId) => {
         datePosted: mediaObject.timestamp,
         caption: mediaObject.caption,
         _id: mediaObject.id,
-        image: mediaObject.image
+        image: ''
     });
 
     return UserAllMedia.findOne({
