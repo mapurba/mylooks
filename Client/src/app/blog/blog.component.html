@@ -3,11 +3,11 @@
     <section class="profile">
       <header class="profile__header">
         <div class="profile__avatar-container">
-          <img src="assets/images/feedPhoto.jpg" class="profile__avatar" />
+          <img [src]="userDetail?.picture" class="profile__avatar" />
         </div>
         <div class="profile__info">
           <div class="profile__name">
-            <h1 class="profile__title">Apurba Mondal</h1>
+            <h1 class="profile__title">{{userDetail?.name}}</h1>
           </div>
           <ul class="profile__numbers">
             <li class="profile__posts">
