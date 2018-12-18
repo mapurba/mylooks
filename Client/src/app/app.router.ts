@@ -7,6 +7,7 @@ const appRoutes: Routes = [
     { path: '', component: FeedComponent },
     { path: 'feed', component: FeedComponent },
     { path: 'profile', component: ProfileComponent },
+    { path: 'blog/:id', component: BlogComponent },
     { path: 'blog', component: BlogComponent },
    
     { path: '**', redirectTo: '' }

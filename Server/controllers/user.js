@@ -141,7 +141,29 @@ exports.getAccount = (req, res) => {
  * Profile  page.
  */
 exports.getAccountDetail = (req, res) => {
-    res.status(200).send(req.user);
+    let userId=undefined;
+    if(req.query.id != undefined && req.query.id!='' && req.query.id!=null){
+        userId=req.query.id;
+    }
+    else if(req.user!=undefined){
+        userId=req.user.facebook;
+    }
+    else{
+        res.status(489).send('no user id');
+    }
+    if(userId!=undefined){
+        User.find({facebook:userId}).then((user)=>{
+            let tempRes=user
+             tempRes.token={};
+             tempRes.isAdmin={};
+            res.status(200).send(tempRes);
+        }).catch((err)=>{
+            res.status(489).send(err);
+        })
+    }
+    
+
+  
 };
 
 /**
@@ -317,12 +339,26 @@ exports.getAllUnSubmitedPhotos = (req, res, next) => {
 
 
 exports.getUserBlogPhotos = (req,res,next) => {
-    InstagramPhotos.find({ facebookId: req.user.facebook }).then((result=>{
-        console.log(result);
-        res.status(200).send(result);
-    })).catch((err)=>{
-        res.status(489).send(err)
-    });
+    let userId=undefined;
+    if(req.query.id != undefined && req.query.id!='' && req.query.id!=null){
+        userId=req.query.id;
+    }
+    else if(req.user!=undefined){
+        userId=req.user.facebook;
+    }
+    else{
+        res.status(489).send('no user id');
+    }
+    // let userId=req.params.id||req.user.facebook;
+    if(userId!=undefined){
+        InstagramPhotos.find({ facebookId:userId }).then((result=>{
+            // console.log(result);
+            res.status(200).send(result);
+        })).catch((err)=>{
+            res.status(489).send(err)
+        });
+    }
+    
 };
 
 

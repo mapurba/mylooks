@@ -148,7 +148,7 @@ app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
-app.get('/account/detail', passportConfig.isAuthenticated, userController.getAccountDetail);
+app.get('/account/detail', userController.getAccountDetail);
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.post('/account/importPhotosFromInstagram', passportConfig.isAuthenticated, userController.importUserPhotos);
@@ -176,7 +176,7 @@ app.get('/admin', apiController.getApi);
  * Admin apis need to add a check in the authenticate function to check is the user is admin or not
  * */
 app.get('/admin/listAllPhotosForReview', passportConfig.isAuthenticated,  apiController.getAllPhotos);
-app.get('/api/getUserBlogPhotos', passportConfig.isAuthenticated,  userController.getUserBlogPhotos);
+app.get('/api/getUserBlogPhotos',  userController.getUserBlogPhotos);
 app.get('/admin/tasklist', passportConfig.isAuthenticated,  apiController.getAllAdminTask);
 app.delete('/admin/tasklist',  apiController.deleteAdminTask);
 
