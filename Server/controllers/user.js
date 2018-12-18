@@ -249,7 +249,7 @@ exports.importUserPhotos = (req, res, next) => {
                 InstagramPhotos.findOne({ _id: request_object[i]._id }).then((existingPhoto) => {
                     if (!existingPhoto) {
                         let savephote = newInstagramPhotos.save();
-                        let updateuserphoto = UserAllMedia.findOneAndUpdate({ _id: request_object[i]._id }, { sendForReview: true }, { overwrite: true });
+                        let updateuserphoto = UserAllMedia.findOneAndUpdate({ _id: request_object[i]._id }, { sendForReview: true });
                         Promise.all([savephote,updateuserphoto]).then((response) => {
                             console.log('added new instagram photo');
                             passed++;
@@ -313,6 +313,16 @@ exports.getAllUnSubmitedPhotos = (req, res, next) => {
     });
 
 
+};
+
+
+exports.getUserBlogPhotos = (req,res,next) => {
+    InstagramPhotos.find({ facebookId: req.user.facebook }).then((result=>{
+        console.log(result);
+        res.status(200).send(result);
+    })).catch((err)=>{
+        res.status(489).send(err)
+    });
 };
 
 

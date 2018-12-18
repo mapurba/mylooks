@@ -176,6 +176,7 @@ app.get('/admin', apiController.getApi);
  * Admin apis need to add a check in the authenticate function to check is the user is admin or not
  * */
 app.get('/admin/listAllPhotosForReview', passportConfig.isAuthenticated,  apiController.getAllPhotos);
+app.get('/api/getUserBlogPhotos', passportConfig.isAuthenticated,  userController.getUserBlogPhotos);
 app.get('/admin/tasklist', passportConfig.isAuthenticated,  apiController.getAllAdminTask);
 app.delete('/admin/tasklist',  apiController.deleteAdminTask);
 
