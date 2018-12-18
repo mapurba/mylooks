@@ -14,7 +14,7 @@ export class UserService {
     return this.http.get('/api/account/getAllUnSubmitedPhotos');
   }
 
-  getUserDetail(userId):Observable<any>{
+  getUserDetail(userId?:any):Observable<any>{
     let url=userId?`/api/account/detail?id=${userId}`:'/api/account/detail';
 
     return this.http.get(url);
