@@ -154,6 +154,7 @@ exports.getAccountDetail = (req, res) => {
     if(userId!=undefined){
         User.find({facebook:userId}).then((user)=>{
             let tempRes=user[0].profile;
+            tempRes.isAdmin=user.isAdmin;
             res.status(200).send(tempRes);
         }).catch((err)=>{
             res.status(489).send(err);

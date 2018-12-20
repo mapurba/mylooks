@@ -1,0 +1,42 @@
+<main class="admin_main">
+  <div class="row">
+    <div class="col">
+      
+    <h2>Admin Task</h2>  
+    
+    </div>
+    
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <!-- <th scope="col">#</th> -->
+            <th scope="col">User</th>
+            <th scope="col">Media</th>
+            <th scope="col">Published</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of adminTask">
+            <!-- <th scope="row">1</th> -->
+            <td>{{item?.user?.profile?.name}}</td>
+            <td class="table_image_col">
+              <div *ngFor="let medias of item.userMedia |slice:0:3;"> 
+                  <img [src]="medias.media_url" class="profile__avatar tableImage" />
+              </div>
+
+            </td>
+            <td>{{item.published}}</td>
+            <td>{{item.createdAt|date}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+</main>
+
+

@@ -10,6 +10,7 @@ import { InterceptService } from './shared/services/http.interceptor.service';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
 import { BlogComponent } from './blog/blog.component';
+import { AdminConsoleComponent } from './admin/admin-console/admin-console.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { BlogComponent } from './blog/blog.component';
     FeedComponent,
     NavComponent,
     ProfileComponent,
-    BlogComponent
+    BlogComponent,
+    AdminConsoleComponent
   ],
   imports: [
     BrowserModule,

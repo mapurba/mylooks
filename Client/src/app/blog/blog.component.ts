@@ -10,18 +10,18 @@ import { UserService } from '../shared/services/user.service';
 })
 export class BlogComponent implements OnInit {
 
-  userfeed=[1,2,3];
-  userBlogPhotos:any;
-  currentUserBlogID:any;
-  userDetail:any;
-  constructor(private http:HttpClient,private route:ActivatedRoute,private userService:UserService) {
-    this.currentUserBlogID=this.route.snapshot.paramMap.get('id');
-    this.getUserDetail( this.currentUserBlogID);
+  userfeed = [1, 2, 3];
+  userBlogPhotos: any;
+  currentUserBlogID: any;
+  userDetail: any;
+  constructor(private http: HttpClient, private route: ActivatedRoute, private userService: UserService) {
+    this.currentUserBlogID = this.route.snapshot.paramMap.get('id');
+    this.getUserDetail(this.currentUserBlogID);
     this.getUserblogPhotos(this.currentUserBlogID);
-   }
+  }
 
   ngOnInit() {
-    
+
   }
 
   getUserDetail(userId) {
@@ -30,10 +30,10 @@ export class BlogComponent implements OnInit {
     });
   }
 
-  getUserblogPhotos(userId){
-    let url=userId?`/api/api/getUserBlogPhotos?id=${userId}`:'/api/api/getUserBlogPhotos';
-    this.http.get(url).subscribe((res)=>{
-      this.userBlogPhotos=res;
+  getUserblogPhotos(userId) {
+    let url = userId ? `/api/api/getUserBlogPhotos?id=${userId}` : '/api/api/getUserBlogPhotos';
+    this.http.get(url).subscribe((res) => {
+      this.userBlogPhotos = res;
     });
   }
 

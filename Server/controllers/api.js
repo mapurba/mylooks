@@ -170,7 +170,7 @@ exports.getAllAdminTask = (req, res) => {
     }, (err) => {
         res.status(489).send(err);
 
-    })
+    });
 
 };
 exports.deleteAdminTask = (req, res) => {

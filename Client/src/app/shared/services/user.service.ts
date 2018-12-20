@@ -16,7 +16,6 @@ export class UserService {
 
   getUserDetail(userId?:any):Observable<any>{
     let url=userId?`/api/account/detail?id=${userId}`:'/api/account/detail';
-
     return this.http.get(url);
   }
 
@@ -35,5 +34,9 @@ export class UserService {
     });
     return this.http.post('/api/account/importPhotosFromInstagram', tempPayload);
 
+  }
+
+  getAdminTask():Observable<any>{
+    return this.http.get('/api/admin/tasklist');
   }
 }
