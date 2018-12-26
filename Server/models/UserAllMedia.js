@@ -30,7 +30,7 @@ const userAllMedia = new mongoose.Schema({
     },
     caption: {
         type: String,
-        required: true
+        required: false
     },
     _id: {
         type: String,

@@ -85,10 +85,10 @@
         <form>
           <div class="form-group">
             <label for="productImage">Product Image</label>
-            <input (change)="saveimage($event)" type="file" class="form-control-file" id="productImage">
+            <input (change)="saveimage($event)" type="text" class="form-control-file" id="productImage">
           </div>
           <div class="form-group">
-            <label for="productLink">Email address</label>
+            <label for="productLink">Link</label>
             <input [(ngModel)]="productLink" [ngModelOptions]="{standalone: true}" type="text" class="form-control" id="productLink" placeholder="Link">
           </div>
         </form>
