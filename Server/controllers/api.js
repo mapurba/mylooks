@@ -161,7 +161,7 @@ exports.getAllPhotos = (req, res) => {
 
 exports.getAllAdminTask = (req, res) => {
 
-    AdminTask.find({}).then((result) => {
+    AdminTask.find({}).sort('-createdAt').then((result) => {
         if (result) {
             res.status(200).send(result);
         } else {

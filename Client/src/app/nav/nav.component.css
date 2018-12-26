@@ -15,8 +15,9 @@
     white-space: nowrap;
     border-radius: 0.2em;
     font-size: 16px;
-    color: #FFF;
-  }
+    color: #4c4949;
+    text-decoration: none;
+    }
   .loginBtn:before {
     content: "";
     box-sizing: border-box;

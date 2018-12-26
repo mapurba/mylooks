@@ -1,14 +1,22 @@
 <main class="admin_main">
-  <div class="row">
-    <div class="col">
-      
-    <h2>Admin Task</h2>  
-    
+  <div class="row" style="padding-bottom: 5px;">
+    <div class="col-auto mr-auto">
+
+      <h3>{{ hideTable?'Add Product':'Admin Task'}} </h3>
+
     </div>
-    
+    <div class="col-auto">
+        <button type="button" class="close" *ngIf="hideTable" (click)="toggleView()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        
+    </div>
+
   </div>
+
+
   <div class="row">
-    <div class="col-12">
+    <div class="col-12" *ngIf="!hideTable">
       <table class="table">
         <thead>
           <tr>
@@ -22,10 +30,10 @@
         <tbody>
           <tr *ngFor="let item of adminTask">
             <!-- <th scope="row">1</th> -->
-            <td>{{item?.user?.profile?.name}}</td>
+            <td> <a class="btn" (click)="taskDetails(item)"> {{item?.user?.profile?.name}}</a></td>
             <td class="table_image_col">
-              <div *ngFor="let medias of item.userMedia |slice:0:3;"> 
-                  <img [src]="medias.media_url" class="profile__avatar tableImage" />
+              <div *ngFor="let medias of item.userMedia |slice:0:3;">
+                <img [src]="medias.media_url" class="profile__avatar tableImage" />
               </div>
 
             </td>
@@ -35,8 +43,59 @@
         </tbody>
       </table>
     </div>
-    
+
+    <div class="col-12" *ngIf="hideTable">
+      <ul class="list-group">
+        <li *ngFor="let medias of selectedTask.userMedia" class="list-group-item d-flex ">
+          <div class="taskimage">
+            <img [src]="medias.media_url" class="taskimage" />
+
+          </div>
+          <div style="padding-left: 19px;">
+            <p>Add product Link <a class="btn" (click)="openDialog(medias)"><i class="fa fa-plus "></i></a>
+            </p>
+            <div class="photo__info" style="padding: 0px 0px 0px 20px;">
+              <img *ngFor="let product of medias.productLink" src="{{'data:image/png;base64,'+product.image}}" class="profile__avatar tableImage" />
+            </div>
+
+
+          </div>
+        </li>
+      </ul>
+
+      <button type="button" style="margin-top: 10px;"  class="btn btn-outline-primary">Publish</button>
+    </div>
   </div>
+
+
+
 </main>
 
+<div class="modal " id="addlikns" tabindex="-1" role="dialog" aria-labelledby="addlikns" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Add product link</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
 
+        <form>
+          <div class="form-group">
+            <label for="productImage">Product Image</label>
+            <input (change)="saveimage($event)" type="file" class="form-control-file" id="productImage">
+          </div>
+          <div class="form-group">
+            <label for="productLink">Email address</label>
+            <input [(ngModel)]="productLink" [ngModelOptions]="{standalone: true}" type="text" class="form-control" id="productLink" placeholder="Link">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="addProductLink()" data-dismiss="modal" class="btn btn-primary">Add</button>
+      </div>
+    </div>
+  </div>
+</div>

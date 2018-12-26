@@ -17,3 +17,12 @@
 .table_image_col{
     display: flex;
 }
+.btn-block{
+
+}
+
+.taskimage{
+    width: 100px;
+    max-height: 100px;
+    
+}

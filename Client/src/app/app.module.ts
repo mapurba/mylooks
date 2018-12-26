@@ -11,6 +11,7 @@ import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common
 import { APP_BASE_HREF } from '@angular/common';
 import { BlogComponent } from './blog/blog.component';
 import { AdminConsoleComponent } from './admin/admin-console/admin-console.component';
+import { FormsModule }   from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,9 @@ import { AdminConsoleComponent } from './admin/admin-console/admin-console.compo
   imports: [
     BrowserModule,
     routing,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
+
   ],
   providers: [
     InterceptService,
