@@ -166,7 +166,7 @@ app.get('/api/importInstagramPhotos', passportConfig.isAuthenticated,  apiContro
 
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }));
 app.get('/auth/facebook/callback',passport.authenticate('facebook',{ failureRedirect: process.env.FACEBOOK_REDIRECT_URL }), (req, res) => {
-  res.cookie('user',req.user._id);
+  res.cookie('user_session',req.user._id);
   res.redirect(process.env.FACEBOOK_REDIRECT_URL);
 });
 
@@ -175,11 +175,11 @@ app.get('/admin', apiController.getApi);
 /**
  * Admin apis need to add a check in the authenticate function to check is the user is admin or not
  * */
-app.get('/admin/listAllPhotosForReview', passportConfig.isAuthenticated,  apiController.getAllPhotos);
+app.get('/admin/listAllPhotosForReview', passportConfig.isAuthenticatedAdmin,  apiController.getAllPhotos);
 app.get('/api/getUserBlogPhotos',  userController.getUserBlogPhotos);
-app.get('/admin/tasklist', passportConfig.isAuthenticated,  apiController.getAllAdminTask);
-app.delete('/admin/tasklist',passportConfig.isAuthenticated,  apiController.deleteAdminTask);
-app.post('/admin/task/approve',passportConfig.isAuthenticated,apiController.approveTask)
+app.get('/admin/tasklist', passportConfig.isAuthenticatedAdmin,  apiController.getAllAdminTask);
+app.delete('/admin/tasklist',passportConfig.isAuthenticatedAdmin,  apiController.deleteAdminTask);
+app.post('/admin/task/approve',passportConfig.isAuthenticatedAdmin,apiController.approveTask)
 
 
 /**

@@ -547,6 +547,23 @@ exports.isAuthenticated = (req, res, next) => {
   // res.redirect('/login');
 };
 
+exports.isAuthenticatedAdmin = (req, res, next) => {
+  // console.log(req.user);
+  if (req.isAuthenticated()) {
+    if(req.user.isAdmin){
+      console.log('admin User check  user :',req.user.profile.name );
+      return next();
+    }
+   
+  }
+// else {
+  res.status(401).send({mgs:'unauthorized user'});
+// }
+// res.redirect('/login');
+};
+
+
+
 /**
  * Authorization Required middleware.
  */

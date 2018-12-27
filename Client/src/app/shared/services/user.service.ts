@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private cookieService: CookieService) { }
 
 
   getAllUnSubmitedPhotos(): Observable<any> {
@@ -43,4 +44,14 @@ export class UserService {
   getAdminTask():Observable<any>{
     return this.http.get('/api/admin/tasklist');
   }
+
+  isLogedinUser():boolean{
+
+    if(this.cookieService.get('user_session')){
+      console.log(this.cookieService.get('user_session'));
+      return true;
+    }
+    return false;
+  }
+
 }

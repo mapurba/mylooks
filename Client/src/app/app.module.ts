@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { CookieService } from 'ngx-cookie-service';
 import { AppComponent } from './app.component';
 import { FeedComponent } from './feed/feed.component';
 import { NavComponent } from './nav/nav.component';
@@ -37,7 +37,7 @@ import { FormsModule }   from '@angular/forms';
       useClass: InterceptService,
       multi: true
     },
-    
+    CookieService,
     HttpClientModule
 
   ],

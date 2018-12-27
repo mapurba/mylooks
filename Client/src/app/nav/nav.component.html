@@ -18,7 +18,7 @@
     <!-- <a   href="/api/auth/facebook"  class="loginBtn loginBtn--facebook navigation__link">
       Login
     </a> -->
-    <a   href="/api/auth/facebook"  class="loginBtn ">
+    <a *ngIf="!isloggedin()"  href="/api/auth/facebook"  class="loginBtn ">
       Login
     </a>
     <!-- <a  href="/api/auth/facebook" class="navigation__link">
