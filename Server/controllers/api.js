@@ -26,7 +26,7 @@ getAllInstagramMedia = (req, res, next, instagramBusinessAccountId) => {
         if (err) {
             return next(err);
         }
-      saveUserMediaLiks(req, res, next, data);
+        saveUserMediaLiks(req, res, next, data);
     });
 }
 
@@ -77,7 +77,7 @@ saveUserMediaLiks = (req, res, next, data) => {
         //                     // console.log('-------------------\n');
         //                     allMedia.push(createMedia(temp, req.user.facebook));
         //                 }
-                       
+
         //             });
 
         //     })
@@ -101,14 +101,14 @@ saveUserMediaLiks = (req, res, next, data) => {
 
     });
 
-    UserAllMedia.insertMany(allMedia,{ ordered: false },(result,err)=>{
-        if(!err){
+    UserAllMedia.insertMany(allMedia, { ordered: false }, (result, err) => {
+        if (!err) {
             console.log(result);
-            res.status(200).send('successfully impoted all the photos');
+            res.status(200).send({msg:'successfully impoted all the photos'});
         }
-        else{
+        else {
             console.log(err);
-            res.status(200).send('failed import photos');
+            res.status(200).send({msg:'failed import photos'});
         }
     });
 }
@@ -163,12 +163,42 @@ exports.deleteAdminTask = (req, res) => {
 
 };
 
+
+// approves task and adds product lisk
+
+exports.approveTask =(req,res)=>{
+
+    console.log(req.body);
+    let userDetails=req.body.user.profile;
+    let postedMedias=req.body.usermedia;
+    let payload=[];
+    postedMedias.map((item)=>{
+        item.user=userDetails;
+        payload.push(item);
+    });
+
+
+   InstagramPhotos.insertMany(payload,{ordered:true},(success,err)=>{
+       if(!err){
+        res.status(200).send({msg:success});
+       }
+       else{
+        //    console
+        res.status(489).send({msg:'Failed to post photos'});
+       }
+   })
+
+    
+}
+
+
+
 /**
  * GET /api/facebook
  * Facebook API example.
  */
 exports.getFacebook = (req, res, next) => {
-    var instagramBusinessAccountId =[];
+    var instagramBusinessAccountId = [];
     const token = req.user.tokens.find(token => token.kind === 'facebook');
     graph.setAccessToken(token.accessToken);
     graph.get(`me/accounts?fields=instagram_business_account`, (err, profile) => {
@@ -176,22 +206,45 @@ exports.getFacebook = (req, res, next) => {
             return next(err);
         }
         console.log(profile);
-        profile.data.map((item)=>{
-            if(item.instagram_business_account!=undefined){
+        profile.data.map((item) => {
+            if (item.instagram_business_account != undefined) {
                 instagramBusinessAccountId.push(item.instagram_business_account.id);
             }
         });
 
-        if(instagramBusinessAccountId.length>0){
+        if (instagramBusinessAccountId.length > 0) {
             getAllInstagramMedia(req, res, next, instagramBusinessAccountId[0]);
         }
-        else{
-            res.status(489).send('buisness accout not found');
+        else {
+            res.status(489).send({msg:'buisness accout not found'});
         }
-
-       
     });
 };
+
+exports.getAllbuisnessAccount =(req,res,next)=>{
+    var instagramBusinessAccountId = [];
+    const token = req.user.tokens.find(token => token.kind === 'facebook');
+    graph.setAccessToken(token.accessToken);
+    graph.get(`me/accounts?fields=instagram_business_account,is_owned,name`, (err, profile) => {
+        if (err) {
+            return next(err);
+        }
+        console.log(profile);
+        profile.data.map((item) => {
+            if (item.instagram_business_account != undefined) {
+                instagramBusinessAccountId.push(item.instagram_business_account.id);
+            }
+        });
+
+        if (instagramBusinessAccountId.length > 0) {
+            res.status(200).send(instagramBusinessAccountId);
+        }
+        else {
+            res.status(489).send('buisness accout not found');
+        }
+    });
+}
+
 
 
 //

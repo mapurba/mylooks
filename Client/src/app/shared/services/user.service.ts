@@ -14,6 +14,10 @@ export class UserService {
     return this.http.get('/api/account/getAllUnSubmitedPhotos');
   }
 
+  submitTask(payload):Observable<any>{
+    return this.http.post('/api/admin/task/approve',payload);
+  }
+
   getUserDetail(userId?:any):Observable<any>{
     let url=userId?`/api/account/detail?id=${userId}`:'/api/account/detail';
     return this.http.get(url);

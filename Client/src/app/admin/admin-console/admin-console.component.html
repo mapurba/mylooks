@@ -55,7 +55,7 @@
             <p>Add product Link <a class="btn" (click)="openDialog(medias)"><i class="fa fa-plus "></i></a>
             </p>
             <div class="photo__info" style="padding: 0px 0px 0px 20px;">
-              <img *ngFor="let product of medias.productLink" src="{{'data:image/png;base64,'+product.image}}" class="profile__avatar tableImage" />
+              <img *ngFor="let product of medias.productLink" src="{{product.image}}" class="profile__avatar tableImage" />
             </div>
 
 
@@ -63,7 +63,7 @@
         </li>
       </ul>
 
-      <button type="button" style="margin-top: 10px;"  class="btn btn-outline-primary">Publish</button>
+      <button type="button" style="margin-top: 10px;" (click)="publish()" class="btn btn-outline-primary">Publish</button>
     </div>
   </div>
 
@@ -85,7 +85,7 @@
         <form>
           <div class="form-group">
             <label for="productImage">Product Image</label>
-            <input (change)="saveimage($event)" type="text" class="form-control-file" id="productImage">
+            <input [(ngModel)]="productImage" [ngModelOptions]="{standalone: true}" type="text" class="form-control" id="productImage" placeholder="Image url">
           </div>
           <div class="form-group">
             <label for="productLink">Link</label>

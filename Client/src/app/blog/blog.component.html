@@ -39,12 +39,9 @@
         </div>
         <div class="photo__info">
 
-          <img src="assets/images/feedPhoto.jpg" class="profile__avatar product_image" />
-          <img src="assets/images/feedPhoto.jpg" class="profile__avatar product_image" />
-          <img src="assets/images/feedPhoto.jpg" class="profile__avatar product_image" />
-          <img src="assets/images/feedPhoto.jpg" class="profile__avatar product_image" />
-          <img src="assets/images/feedPhoto.jpg" class="profile__avatar product_image" />
-          <img src="assets/images/feedPhoto.jpg" class="profile__avatar product_image" />
+          <a *ngFor="let product of item.productLink" target="_blank" [href]="product.productLink">
+              <img src="{{product.image}}"   class="profile__avatar product_image" />
+          </a>
 
         </div>
       </section>

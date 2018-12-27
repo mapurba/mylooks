@@ -178,7 +178,8 @@ app.get('/admin', apiController.getApi);
 app.get('/admin/listAllPhotosForReview', passportConfig.isAuthenticated,  apiController.getAllPhotos);
 app.get('/api/getUserBlogPhotos',  userController.getUserBlogPhotos);
 app.get('/admin/tasklist', passportConfig.isAuthenticated,  apiController.getAllAdminTask);
-app.delete('/admin/tasklist',  apiController.deleteAdminTask);
+app.delete('/admin/tasklist',passportConfig.isAuthenticated,  apiController.deleteAdminTask);
+app.post('/admin/task/approve',passportConfig.isAuthenticated,apiController.approveTask)
 
 
 /**

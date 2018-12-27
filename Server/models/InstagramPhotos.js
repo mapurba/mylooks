@@ -2,11 +2,13 @@ const bcrypt = require('bcrypt-nodejs');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 
+
 const instagramPhotos = new mongoose.Schema({
     caption: {
         type: String,
         required: false
     },
+    user:{type:Object,required:true},
     _id: {type: String, required: true},
     facebookId: {type: String, required: true},
     like_count: {type: Number},
@@ -16,6 +18,7 @@ const instagramPhotos = new mongoose.Schema({
         required: true,
         default: ''
     },
+    productLink:{type:Object,require:true},
     permalink: {type: String, required: true, default: ''},
     username: {type: String, required: false},
 }, {timestamps: true});

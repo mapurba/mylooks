@@ -24,6 +24,8 @@ export class AdminConsoleComponent implements OnInit {
 
   openDialog(media) {
     this.selectedMedia = media;
+    this.productLink='';
+    this.productImage='';
     $('#addlikns').modal('show');
 
 
@@ -78,4 +80,11 @@ export class AdminConsoleComponent implements OnInit {
 
   }
 
+
+  publish(){
+    let payload={'user':this.selectedTask.user,'usermedia':this.selectedTask.userMedia};
+    this.userService.submitTask(payload).subscribe((res)=>{
+
+    });
+  }
 }

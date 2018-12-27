@@ -29,7 +29,8 @@ export class ProfileComponent implements OnInit {
   }
   importPhoto() {
     this.userService.importPhotos().subscribe((res) => {
-      console.log(res);
+     // console.log(res);
+     this.getAllUnPostedPhotos();
     }, (err) => {
       console.log(err);
     })
