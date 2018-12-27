@@ -15,7 +15,7 @@ export class NavComponent implements OnInit {
 
 
   public isloggedin(){
-    console.log(this.userService.isLogedinUser());
+    // console.log(this.userService.isLogedinUser());
     return this.userService.isLogedinUser();
   }
 

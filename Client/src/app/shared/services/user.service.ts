@@ -48,7 +48,7 @@ export class UserService {
   isLogedinUser():boolean{
 
     if(this.cookieService.get('user_session')){
-      console.log(this.cookieService.get('user_session'));
+      // console.log(this.cookieService.get('user_session'));
       return true;
     }
     return false;
