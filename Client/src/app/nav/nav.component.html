@@ -3,26 +3,10 @@
   <a href="feed.html">
     <img src="assets/images/mylooks-logo.png" alt="logo" title="logo" width="150px" class="navigation__logo" />
   </a>
-  <!-- <div class="navigation__search-container">
-    <i class="fa fa-search"></i>
-    <input type="text" placeholder="Search">
-  </div> -->
-  <div class="navigation__icons">
-    <a [routerLink]="['blog']" class="loginBtn">
-      Blog
-    </a>
-    <a [routerLink]="['profile']"  class="loginBtn">
-     Profile
-    </a>
-
-    <!-- <a   href="/api/auth/facebook"  class="loginBtn loginBtn--facebook navigation__link">
-      Login
-    </a> -->
-    <a *ngIf="!isloggedin()"  href="/api/auth/facebook"  class="loginBtn ">
-      Login
-    </a>
-    <!-- <a  href="/api/auth/facebook" class="navigation__link">
-      <img src="assets/images/fblogin.png" alt="Login with Facebook" title="Login with Facebook" width="150px" class="navigation__logo" >
-    </a> -->
-  </div>
+  
+  <nav class="nav">
+      <a class="nav-link" [routerLink]="['blog']" href="#">Blog</a>
+      <a class="nav-link" [routerLink]="['profile']"  href="#">Profile</a>
+      <!-- <a class="nav-link" href="/api/auth/facebook" >Login</a> -->
+    </nav>
 </nav>
