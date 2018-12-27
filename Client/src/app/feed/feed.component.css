@@ -3,6 +3,10 @@
 	clear: both;
 	padding: 0px;
 	margin: 0px;
+	/* padding: 0% 10% 0% 10%; */
+}
+.feed{
+	padding: 0% 10% 0% 10%;
 }
 
 /*  COLUMN SETUP  */
@@ -11,7 +15,8 @@
 	float:left;
 	margin: 1% 0 1% 1.6%;
 }
-.col:first-child { margin-left: 0; }
+.col:first-child { margin-left: 0;
+}
 
 /*  GROUPING  */
 .group:before,
@@ -28,4 +33,15 @@
 @media only screen and (max-width: 480px) {
 	.col {  margin: 1% 0 1% 0%; }
 	.span_3_of_3, .span_2_of_3, .span_1_of_3 { width: 100%; }
+	.feed{
+		padding: 0% 0% 0% 0%;
+	}
+	
+}
+
+.product_image{
+	width: 60px;
+	height: 60px;
+	margin-left:10px; 
+	cursor: pointer;
 }
