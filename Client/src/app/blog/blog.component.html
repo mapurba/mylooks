@@ -30,8 +30,8 @@
 
     </section>
   </main>
-  <div class="section group">
-    <div class="col span_1_of_3" *ngFor="let item of userBlogPhotos">
+  <div *ngIf="!loadingPhotos" class="section group">
+    <div  class="col span_1_of_3" *ngFor="let item of userBlogPhotos">
       <section class="photo">
 
         <div class="photo__file-container">
@@ -46,9 +46,7 @@
         </div>
       </section>
     </div>
-
-
-
-
   </div>
+ 
+
 </main>

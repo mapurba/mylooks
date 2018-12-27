@@ -45,3 +45,9 @@
 	margin-left:10px; 
 	cursor: pointer;
 }
+.vertical-spacer{
+	margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+	border-top:none;
+}
