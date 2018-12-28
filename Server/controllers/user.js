@@ -141,29 +141,29 @@ exports.getAccount = (req, res) => {
  * Profile  page.
  */
 exports.getAccountDetail = (req, res) => {
-    let userId=undefined;
-    
-    if(req.query.id != undefined && req.query.id!='' && req.query.id!=null){
-        userId=req.query.id;
+    let userId = undefined;
+
+    if (req.query.id != undefined && req.query.id != '' && req.query.id != null) {
+        userId = req.query.id;
     }
-    else if(req.user!=undefined){
-        userId=req.user.username;
+    else if (req.user != undefined) {
+        userId = req.user.username;
     }
-    else{
+    else {
         res.status(489).send('no user id');
     }
-    if(userId!=undefined){
-        User.find({username:userId}).then((user)=>{
-            let tempRes=user[0].profile;
-            tempRes.isAdmin=user.isAdmin;
+    if (userId != undefined) {
+        User.find({ username: userId }).then((user) => {
+            let tempRes = { name: user[0].profile.name, username: user[0].username, picture: user[0].profile.picture, isAdmin: user[0].isAdmin };
+            // tempRes.isAdmin = user.isAdmin;
             res.status(200).send(tempRes);
-        }).catch((err)=>{
+        }).catch((err) => {
             res.status(489).send(err);
         })
     }
-    
 
-  
+
+
 };
 
 /**
@@ -256,46 +256,46 @@ exports.postDeleteAccount = (req, res, next) => {
 exports.importUserPhotos = (req, res, next) => {
     let request_object = req.body, failed = passed = 0;
     // for (const photos of req.body) {
-        // if (request_object instanceof Array) {
-        //     for (let i = 0; i < request_object.length; i++) {
-        //         const newInstagramPhotos = new InstagramPhotos({
-        //             caption: request_object[i].caption,
-        //             _id: request_object[i]._id,
-        //             facebookId: req.user.facebook,
-        //             like_count: request_object[i].like_count,
-        //             media_type: request_object[i].media_type,
-        //             media_url: request_object[i].media_url,
-        //             permalink: request_object[i].permalink,
-        //             username: request_object[i].username,
-        //         });
-        //         InstagramPhotos.findOne({ _id: request_object[i]._id }).then((existingPhoto) => {
-        //             if (!existingPhoto) {
-        //                 let savephote = newInstagramPhotos.save();
-        //                // let updateuserphoto = UserAllMedia.findOneAndUpdate({ _id: request_object[i]._id }, { sendForReview: true });
-        //                 Promise.all([savephote]).then((response) => {
-        //                     console.log('added new instagram photo');
-        //                     passed++;
-        //                 }).catch((err) => {
-        //                     failed++;
-        //                     console.error('db operation failed while insrerting photos send by user : ', err);
-        //                 });
-        //             }
-        //         });
+    // if (request_object instanceof Array) {
+    //     for (let i = 0; i < request_object.length; i++) {
+    //         const newInstagramPhotos = new InstagramPhotos({
+    //             caption: request_object[i].caption,
+    //             _id: request_object[i]._id,
+    //             facebookId: req.user.facebook,
+    //             like_count: request_object[i].like_count,
+    //             media_type: request_object[i].media_type,
+    //             media_url: request_object[i].media_url,
+    //             permalink: request_object[i].permalink,
+    //             username: request_object[i].username,
+    //         });
+    //         InstagramPhotos.findOne({ _id: request_object[i]._id }).then((existingPhoto) => {
+    //             if (!existingPhoto) {
+    //                 let savephote = newInstagramPhotos.save();
+    //                // let updateuserphoto = UserAllMedia.findOneAndUpdate({ _id: request_object[i]._id }, { sendForReview: true });
+    //                 Promise.all([savephote]).then((response) => {
+    //                     console.log('added new instagram photo');
+    //                     passed++;
+    //                 }).catch((err) => {
+    //                     failed++;
+    //                     console.error('db operation failed while insrerting photos send by user : ', err);
+    //                 });
+    //             }
+    //         });
 
-        //     }
-        //     if (failed <= 0) {
+    //     }
+    //     if (failed <= 0) {
 
-        //         newAdminTask(req,res,req.user,request_object);
-                
-        //     }
-        //     else {
-        //         res.status(489).send({ "failed": failed, "passed": passed });
-        //     }
-        // } else {
-        //     res.status(489).send('Invalid Input');
-        // }
+    //         newAdminTask(req,res,req.user,request_object);
 
-        newAdminTask(req,res,req.user,request_object);
+    //     }
+    //     else {
+    //         res.status(489).send({ "failed": failed, "passed": passed });
+    //     }
+    // } else {
+    //     res.status(489).send('Invalid Input');
+    // }
+
+    newAdminTask(req, res, req.user, request_object);
 
 
     // }
@@ -303,22 +303,22 @@ exports.importUserPhotos = (req, res, next) => {
 
 }
 
-newAdminTask=(req,res,user,request_object)=>{
-    const adminTask =new AdminTask({user:user,userMedia:request_object});
+newAdminTask = (req, res, user, request_object) => {
+    const adminTask = new AdminTask({ user: user, userMedia: request_object });
     adminTask.save((err) => {
         if (err) {
             //return next(err);
             console.log('error while creating admin task');
             res.status(489).send({ err: "err posting  photos" });
 
-            
+
         }
         console.log('added new admin task');
         res.status(200).send({ success: "sucessfully posted  photos" });
 
 
     });
-// console.log(user);
+    // console.log(user);
 }
 
 
@@ -341,27 +341,27 @@ exports.getAllUnSubmitedPhotos = (req, res, next) => {
 };
 
 
-exports.getUserBlogPhotos = (req,res,next) => {
-    let userId=undefined;
-    if(req.query.id != undefined && req.query.id!='' && req.query.id!=null){
-        userId=req.query.id;
+exports.getUserBlogPhotos = (req, res, next) => {
+    let userId = undefined;
+    if (req.query.id != undefined && req.query.id != '' && req.query.id != null) {
+        userId = req.query.id;
     }
-    else if(req.user!=undefined){
-        userId=req.user.username;
+    else if (req.user != undefined) {
+        userId = req.user.username;
     }
-    else{
+    else {
         res.status(489).send('no user id');
     }
     // let userId=req.params.id||req.user.facebook;
-    if(userId!=undefined){
-        InstagramPhotos.find({ username:userId }).then((result=>{
+    if (userId != undefined) {
+        InstagramPhotos.find({ username: userId }).then((result => {
             // console.log(result);
             res.status(200).send(result);
-        })).catch((err)=>{
+        })).catch((err) => {
             res.status(489).send(err)
         });
     }
-    
+
 };
 
 
