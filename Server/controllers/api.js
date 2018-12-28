@@ -95,7 +95,8 @@ saveUserMediaLiks = (req, res, next, data) => {
             datePosted: mediaObject.timestamp,
             caption: mediaObject.caption,
             _id: mediaObject.id,
-            image: ''
+            image: '',
+            username:req.user.username
         });
 
 
@@ -169,7 +170,7 @@ exports.deleteAdminTask = (req, res) => {
 exports.approveTask =(req,res)=>{
 
     console.log(req.body);
-    let userDetails=req.body.user.profile;
+    let userDetails=req.body.user.username;
     let postedMedias=req.body.usermedia;
     let payload=[];
     postedMedias.map((item)=>{
@@ -178,7 +179,7 @@ exports.approveTask =(req,res)=>{
     });
 
 
-   InstagramPhotos.insertMany(payload,{ordered:true},(success,err)=>{
+   InstagramPhotos.insertMany(payload,{ordered:false},(success,err)=>{
        if(!err){
         res.status(200).send({msg:success});
        }

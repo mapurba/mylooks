@@ -1,52 +1,57 @@
-<main class="feed">
-  <main class="profile-container">
-    <section class="profile">
-      <header class="profile__header">
-        <div class="profile__avatar-container">
-          <img [src]="userDetail?.picture" class="profile__avatar" />
+<div class="container">
+  <section class="profile">
+    <header class="profile__header">
+      <div class="profile__avatar-container">
+        <img [src]="userDetail?.picture" class="profile__avatar" />
+      </div>
+      <div class="profile__info">
+        <div class="profile__name">
+          <h1 class="profile__title">{{userDetail?.name}}</h1>
         </div>
-        <div class="profile__info">
-          <div class="profile__name">
-            <h1 class="profile__title">{{userDetail?.name}}</h1>
+        <ul class="profile__numbers">
+          <li class="profile__posts">
+            <span class="profile__number u-fat-text">10</span> posts
+          </li>
+          <li class="profile__followers">
+            <span class="profile__number u-fat-text">40</span> followers
+          </li>
+          <li class="profile__following">
+            <span class="profile__number u-fat-text">134</span> following
+          </li>
+        </ul>
+        <div class="profile__bio">
+          <span class="profile__full-name u-fat-text">Apurba Mondal</span>
+          <p class="profile__full-bio"> "In order to be irreplaceable one must always be different." </p>
+          <a href="http://mylooks.com" class="profile__link u-fat-text">Mylooks.com</a>
+        </div>
+      </div>
+    </header>
+
+  </section>
+
+  <div class="row justify-content-md-center">
+    <div class="col-sm-10 px-auto ">
+      <div class="row px-auto">
+        <div class="col-6  px-0 mb-4 " *ngFor="let item of userBlogPhotos">
+          <div class="mr-1 ml-1 border">
+              <div class="image">
+                  <img class="profile-picture__picture img" [src]="item.media_url" />
+                </div>
+                <div class="photo__info">
+      
+                  <a *ngFor="let product of item.productLink" target="_blank" [href]="product.productLink">
+                    <img src="{{product.image}}" class="profile__avatar product_image" />
+                  </a>
+      
+                </div>
           </div>
-          <ul class="profile__numbers">
-            <li class="profile__posts">
-              <span class="profile__number u-fat-text">10</span> posts
-            </li>
-            <li class="profile__followers">
-              <span class="profile__number u-fat-text">40</span> followers
-            </li>
-            <li class="profile__following">
-              <span class="profile__number u-fat-text">134</span> following
-            </li>
-          </ul>
-          <div class="profile__bio">
-            <span class="profile__full-name u-fat-text">Apurba Mondal</span>
-            <p class="profile__full-bio"> "In order to be irreplaceable one must always be different." </p>
-            <a href="http://mylooks.com" class="profile__link u-fat-text">Mylooks.com</a>
-          </div>
+          
         </div>
-      </header>
 
-    </section>
-  </main>
-  <div *ngIf="!loadingPhotos" class="section group">
-    <div  class="col span_1_of_3" *ngFor="let item of userBlogPhotos">
-      <section class="photo">
-
-        <div class="photo__file-container">
-          <img class="photo__file" [src]="item.media_url" />
-        </div>
-        <div class="photo__info">
-
-          <a *ngFor="let product of item.productLink" target="_blank" [href]="product.productLink">
-              <img src="{{product.image}}"   class="profile__avatar product_image" />
-          </a>
-
-        </div>
-      </section>
+      </div>
     </div>
-  </div>
- 
 
-</main>
+  </div>
+
+
+</div>
