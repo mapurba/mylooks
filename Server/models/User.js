@@ -28,7 +28,9 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         required: false,
         default: false
-    }
+    },
+    username:{type:String,required:true},
+    intagramAccount:Object
 }, {timestamps: true});
 
 /**

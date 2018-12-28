@@ -1,5 +1,6 @@
 const passport = require('passport');
 const request = require('request');
+const graph =require('fbgraph');
 const { Strategy: InstagramStrategy } = require('passport-instagram');
 const { Strategy: LocalStrategy } = require('passport-local');
 const { Strategy: FacebookStrategy } = require('passport-facebook');
@@ -64,7 +65,7 @@ passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_ID,
   clientSecret: process.env.FACEBOOK_SECRET,
   callbackURL: process.env.FACEBOOK_CALLBACK_URL,
-  profileFields: ['name', 'email', 'link', 'locale', 'timezone', 'gender'],
+  profileFields: ['name', 'email', 'link', 'locale', 'gender',],
   passReqToCallback: true
 }, (req, accessToken, refreshToken, profile, done) => {
  
@@ -103,17 +104,50 @@ passport.use(new FacebookStrategy({
           req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Facebook manually from Account Settings.' });
           done(err);
         } else {
-          const user = new User();
-          user.email = profile._json.email;
-          user.facebook = profile.id;
-          user.tokens.push({ kind: 'facebook', accessToken });
-          user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
-          user.profile.gender = profile._json.gender;
-          user.profile.picture = `https://graph.facebook.com/${profile.id}/picture?type=large`;
-          user.profile.location = (profile._json.location) ? profile._json.location.name : '';
-          user.save((err) => {
-            done(err, user);
-          });
+
+          graph.setAccessToken(accessToken);
+          const uri = 'me/accounts?fields=instagram_business_account';
+          graph.get(uri,(err,data)=>{
+            let instagram_business_account=[];
+            if(err){
+              done(err);
+            }
+            data.data.map((item)=>{
+              if(item.instagram_business_account !=undefined){
+                instagram_business_account.push(item.instagram_business_account.id);
+              }
+             
+            });
+            if(instagram_business_account.length >0){
+              const instaUri=instagram_business_account[0]+'?fields=username,profile_picture_url,followers_count,name,website';
+              // console.log(instaUri);
+              graph.get(instaUri,(err,data)=>{
+                if(err){
+                  done(err);
+                }
+                // console.log(profile);
+                const user = new User();
+                user.email = profile._json.email;
+                user.username=data.username;
+                user.intagramAccount=data;
+                user.facebook = profile.id;
+                user.tokens.push({ kind: 'facebook', accessToken });
+                user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
+                user.profile.gender = profile._json.gender;
+                user.profile.picture = `https://graph.facebook.com/${profile.id}/picture?type=large`;
+                user.profile.location = (profile._json.location) ? profile._json.location.name : '';
+                user.save((saveErr) => {
+                  done(saveErr, user);
+                });
+              });
+            }
+            else{
+              req.status(489).send({msg:'buiness acount not found'});
+            }
+            
+          })
+
+         
         }
       });
     });

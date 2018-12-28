@@ -142,17 +142,18 @@ exports.getAccount = (req, res) => {
  */
 exports.getAccountDetail = (req, res) => {
     let userId=undefined;
+    
     if(req.query.id != undefined && req.query.id!='' && req.query.id!=null){
         userId=req.query.id;
     }
     else if(req.user!=undefined){
-        userId=req.user.facebook;
+        userId=req.user.username;
     }
     else{
         res.status(489).send('no user id');
     }
     if(userId!=undefined){
-        User.find({facebook:userId}).then((user)=>{
+        User.find({username:userId}).then((user)=>{
             let tempRes=user[0].profile;
             tempRes.isAdmin=user.isAdmin;
             res.status(200).send(tempRes);
@@ -346,14 +347,14 @@ exports.getUserBlogPhotos = (req,res,next) => {
         userId=req.query.id;
     }
     else if(req.user!=undefined){
-        userId=req.user.facebook;
+        userId=req.user.username;
     }
     else{
         res.status(489).send('no user id');
     }
     // let userId=req.params.id||req.user.facebook;
     if(userId!=undefined){
-        InstagramPhotos.find({ facebookId:userId }).then((result=>{
+        InstagramPhotos.find({ username:userId }).then((result=>{
             // console.log(result);
             res.status(200).send(result);
         })).catch((err)=>{
