@@ -7,7 +7,7 @@
       <div class="profile__info">
         <div class="profile__name">
           <h1 class="profile__title">{{userDetail?.name}}</h1>
-          <i class="fa fa-cog fa-2x" id="cog"></i>
+          <i (click)="copyToClipboard()" class="fa fa-share fa-2x" id="share" data-toggle="tooltip" data-placement="right" title="Share your profile Click to Copy"></i>
         </div>
         <div class="profile__name">
           <a href="edit-profile.html" class="profile__button u-fat-text">Edit profile</a>

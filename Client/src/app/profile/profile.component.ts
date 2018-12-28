@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../shared/services/user.service';
+declare var $: any;
 
 @Component({
   selector: 'app-profile',
@@ -34,6 +35,17 @@ export class ProfileComponent implements OnInit {
     }, (err) => {
       console.log(err);
     })
+  }
+
+  copyToClipboard() {
+    let item='https://mylooks.southeastasia.cloudapp.azure.com/blog/'+this.userDetail.username;
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', (item));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+      $('#share').tooltip('show')
+    });
+    document.execCommand('copy');
   }
 
   getUserDetail() {
