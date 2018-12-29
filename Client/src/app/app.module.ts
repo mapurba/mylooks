@@ -12,6 +12,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { BlogComponent } from './blog/blog.component';
 import { AdminConsoleComponent } from './admin/admin-console/admin-console.component';
 import { FormsModule }   from '@angular/forms';
+import { PrivacyComponent } from './privacy/privacy.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { FormsModule }   from '@angular/forms';
     NavComponent,
     ProfileComponent,
     BlogComponent,
-    AdminConsoleComponent
+    AdminConsoleComponent,
+    PrivacyComponent
   ],
   imports: [
     BrowserModule,

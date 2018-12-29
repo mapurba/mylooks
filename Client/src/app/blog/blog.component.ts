@@ -15,7 +15,7 @@ export class BlogComponent implements OnInit {
   currentUserBlogID: any;
   userDetail: any;
   loadingPhotos:boolean=true;
-  constructor(private http: HttpClient, private route: ActivatedRoute, private userService: UserService) {
+  constructor(private http: HttpClient, private route: ActivatedRoute,private router:Router, private userService: UserService) {
     this.currentUserBlogID = this.route.snapshot.paramMap.get('id');
     this.getUserDetail(this.currentUserBlogID);
     this.getUserblogPhotos(this.currentUserBlogID);
@@ -28,6 +28,8 @@ export class BlogComponent implements OnInit {
   getUserDetail(userId) {
     this.userService.getUserDetail(userId).subscribe((res) => {
       this.userDetail = res;
+    },(err)=>{
+      this.router.navigate['/'];
     });
   }
 
@@ -36,6 +38,8 @@ export class BlogComponent implements OnInit {
     this.http.get(url).subscribe((res) => {
       this.userBlogPhotos = res;
       this.loadingPhotos=false;
+    },(err)=>{
+      this.router.navigate['/'];
     });
   }
 
