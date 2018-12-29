@@ -7,10 +7,10 @@
       <div class="profile__info">
         <div class="profile__name">
           <h1 class="profile__title">{{userDetail?.name}}</h1>
-          <i (click)="copyToClipboard()" class="fa fa-share fa-2x" id="share" data-toggle="tooltip" data-placement="right" title="Share your profile Click to Copy"></i>
+          <i ></i>
         </div>
         <div class="profile__name">
-          <a href="edit-profile.html" class="profile__button u-fat-text">Edit profile</a>
+          <a (click)="copyToClipboard()" id="share" data-toggle="tooltip" data-placement="right" title="Share your profile Click to Copy" class="profile__button u-fat-text">Share your profile</a>
           <a (click)="importPhoto()" class="profile__button u-fat-text">Import Photos</a>
           <a (click)="enableEdit()" *ngIf="publishPhotoList.size < 1" class="profile__button u-fat-text">Publish Photos</a>
           <a (click)="publish()" *ngIf="publishPhotoList.size >= 1" class="profile__button u-fat-text">Publish</a>
