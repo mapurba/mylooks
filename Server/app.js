@@ -134,6 +134,7 @@ app.use((req, res, next) => {
     // }
 });
 app.get('/', homeController.index);
+app.get('/client/', homeController.index);
 
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
