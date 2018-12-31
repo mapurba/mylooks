@@ -18,10 +18,10 @@ const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 // const sass = require('node-sass-middleware');
-const multer = require('multer');
+//const multer = require('multer');
 
 
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+//const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -134,7 +134,6 @@ app.use((req, res, next) => {
     // }
 });
 app.get('/', homeController.index);
-app.get('/client/', homeController.index);
 
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
