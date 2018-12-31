@@ -6,9 +6,7 @@ const UserAllMedia = require('../models/UserAllMedia');
  * Home page.
  */
 exports.index = (req, res) => {
-  res.render('home', {
-    title: 'Home'
-  });
+  res.render('home', '../public/index.html');
 };
 
 exports.getUserBlog = (req, res, next) => {
