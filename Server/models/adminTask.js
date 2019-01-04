@@ -9,7 +9,7 @@ const adminTask = new mongoose.Schema({
     user: {type: {}, required: true},
     userMedia:{type:[],required:true},
     published:{type:Boolean,required:false,default:false}
-}, {timestamps: true});
+},{ timestamps: true });
 
 
 /**

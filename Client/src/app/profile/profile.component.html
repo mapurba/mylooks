@@ -11,9 +11,8 @@
         </div>
         <div class="profile__name">
           <a (click)="copyToClipboard()" id="share" data-toggle="tooltip" data-placement="right" title="Share your profile Click to Copy" class="profile__button u-fat-text">Share your profile</a>
-          <a (click)="importPhoto()" class="profile__button u-fat-text">Import Photos</a>
-          <a (click)="enableEdit()" *ngIf="publishPhotoList.size < 1" class="profile__button u-fat-text">Publish Photos</a>
-          <a (click)="publish()" *ngIf="publishPhotoList.size >= 1" class="profile__button u-fat-text">Publish</a>
+          <a (click)="showAddphotos()" *ngIf="publishPhotoList.size < 1" class="profile__button u-fat-text">Add Photos to Blog</a>
+          <!-- <a (click)="publish()" *ngIf="publishPhotoList.size >= 1" class="profile__button u-fat-text">Publish</a> -->
         </div>
         <ul class="profile__numbers">
           <li class="profile__posts">
@@ -36,9 +35,9 @@
 
     <div class="profile__pictures">
 
-      <a *ngFor="let item of userPhotos" class="profile-picture">
+      <a *ngFor="let item of userPhotos?.data" class="profile-picture">
         <div class="image">
-            <img [src]='item.media_url' class="profile-picture__picture img" />
+            <img [src]='item?.images?.standard_resolution.url' class="profile-picture__picture img" />
         </div>
         <div class="profile-picture__overlay">
           <span class="profile-picture__number">
@@ -49,13 +48,10 @@
           </span>
 
         </div>
-        <div class="" *ngIf="enableCheckBoxes">
-          <span class="profile-picture__checkBox">
-            <input type="checkbox" value (click)="addPhotoToList(item,$event)">
-          </span>
-        </div>
       </a>
 
     </div>
   </section>
 </main>
+
+<app-post-photos-toblog [userPhotos]="userPhotos?.data" ></app-post-photos-toblog>

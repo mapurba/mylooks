@@ -8,15 +8,23 @@ import { UserService } from '../shared/services/user.service';
 })
 export class NavComponent implements OnInit {
 
+  loggedInUserDetails:any;
   constructor(private userService:UserService) { }
 
   ngOnInit() {
+    this.getUserDetail();
   }
 
 
   public isloggedin(){
     // console.log(this.userService.isLogedinUser());
     return this.userService.isLogedinUser();
+  }
+
+  getUserDetail(){
+    this.userService.getUserDetailV2().subscribe((res)=>{
+      this.loggedInUserDetails=res.user;
+    })
   }
 
 

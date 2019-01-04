@@ -83,7 +83,7 @@ Features
 - MVC Project Structure
 - Node.js clusters support
 - Sass stylesheets (auto-compiled via middleware)
-- Bootstrap 3 + Extra Themes
+- Bootstrap 4 + Extra Themes
 - Contact Form (powered by Mailgun, Sendgrid or Mandrill)
 - **Account Management**
  - Gravatar
@@ -520,8 +520,10 @@ That's a custom error message defined in `app.js` to indicate that there was a
 problem connecting to MongoDB:
 
 ```js
-mongoose.connection.on('error', () => {
-  console.error('MongoDB Connection Error. Please make sure MongoDB is running.');
+mongoose.connection.on('error', (err) => {
+  console.error(err);
+  console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
+  process.exit();
 });
 ```
 You need to have a MongoDB server running before launching `app.js`. You can
@@ -708,7 +710,7 @@ or send a pull request if you  would like to include something that I missed.
 <hr>
 
 ### How do I create a new page?
-A more correct way to be to say "How do I create a new route". The main file `app.js` contains all the routes.
+A more correct way to say this would be "How do I create a new route?" The main file `app.js` contains all the routes.
 Each route has a callback function associated with it. Sometimes you will see 3 or more arguments
 to routes. In cases like that, the first argument is still a URL string, while middle arguments
 are what's called middleware. Think of middleware as a door. If this door prevents you from
@@ -1460,7 +1462,7 @@ Be sure to check out the full list of Watson services to forwarder enhance your 
 
     ```yaml
     runtime: nodejs
-    vm: true
+    env: flex
     manual_scaling:
       instances: 1
     ```

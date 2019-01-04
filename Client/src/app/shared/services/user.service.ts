@@ -12,7 +12,7 @@ export class UserService {
 
 
   getAllUnSubmitedPhotos(): Observable<any> {
-    return this.http.get('/api/account/getAllUnSubmitedPhotos');
+    return this.http.get('/api/user/photos');
   }
 
   submitTask(payload):Observable<any>{
@@ -23,6 +23,12 @@ export class UserService {
     let url=userId?`/api/account/detail?id=${userId}`:'/api/account/detail';
     return this.http.get(url);
   }
+  getUserDetailV2(userId?:any):Observable<any>{
+    let url=`/api/user/details`;
+    return this.http.get(url);
+  }
+
+
 
 
   importPhotos(): Observable<any> {
@@ -32,12 +38,10 @@ export class UserService {
   reviewPhoto(publishPhotoList:any) {
 
 
-    let tempPayload =[];
-     publishPhotoList.forEach(element => {
+     publishPhotoList.photos.map(element => {
        element.sendForReview=true;
-      tempPayload.push(element);
     });
-    return this.http.post('/api/account/importPhotosFromInstagram', tempPayload);
+    return this.http.post('/api/user/postPhotosToBlog', publishPhotoList);
 
   }
 

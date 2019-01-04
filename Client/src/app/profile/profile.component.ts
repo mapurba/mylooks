@@ -12,26 +12,29 @@ export class ProfileComponent implements OnInit {
   userPhotos: any;
   userDetail: any;
   enableCheckBoxes: boolean = false;
+  enablePostPopup:boolean=false;
   publishPhotoList:Map<String,any>;
   constructor(private userService: UserService) {
 
 
-    this.getUserDetail();
-    this.getAllUnPostedPhotos();
+   // this.getUserDetail();
+    this.getUserPhotos();
 
     this.publishPhotoList = new Map();
 
   }
 
-  getAllUnPostedPhotos() {
+  getUserPhotos() {
     this.userService.getAllUnSubmitedPhotos().subscribe((res) => {
       this.userPhotos = res;
+      this.userDetail = res.user;
+
     });
   }
   importPhoto() {
     this.userService.importPhotos().subscribe((res) => {
      // console.log(res);
-     this.getAllUnPostedPhotos();
+     this.getUserPhotos();
     }, (err) => {
       console.log(err);
     })
@@ -60,6 +63,11 @@ export class ProfileComponent implements OnInit {
     this.enableCheckBoxes ? this.enableCheckBoxes = false : this.enableCheckBoxes = true;
   }
 
+  showAddphotos(){
+    // this.enablePostPopup ? this.enablePostPopup = false : this.enablePostPopup = true;
+    $('#postphotostoblog').modal('show');
+  }
+
   addPhotoToList(item, $event) {
     let tempitem= Object.assign({},item);
     tempitem.image="";
@@ -77,7 +85,7 @@ export class ProfileComponent implements OnInit {
 
     this.userService.reviewPhoto(this.publishPhotoList).subscribe((res)=>{
     //  console.log(res);
-      this.getAllUnPostedPhotos();
+      this.getUserPhotos();
     })
   }
   

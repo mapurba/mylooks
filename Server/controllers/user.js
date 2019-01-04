@@ -3,24 +3,21 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../models/User');
-const InstagramPhotos = require('../models/InstagramPhotos');
-const UserAllMedia = require('../models/UserAllMedia');
-const AdminTask = require('../models/AdminTask');
-
+const UserMedias = require('../models/UserMedias')
 const randomBytesAsync = promisify(crypto.randomBytes);
+const AdminTask =require('../models/adminTask');
 
 /**
  * GET /login
  * Login page.
  */
 exports.getLogin = (req, res) => {
-    if (req.user) {
-        return res.redirect('http://localhost:4200/Dashboard');
-    }
-    else {
-        return res.redirect('http://localhost:4200/Login');
-
-    }
+  if (req.user) {
+    return res.redirect('/');
+  }
+  res.render('account/login', {
+    title: 'Login'
+  });
 };
 
 /**
@@ -28,33 +25,29 @@ exports.getLogin = (req, res) => {
  * Sign in using email and password.
  */
 exports.postLogin = (req, res, next) => {
-    req.assert('email', 'Email is not valid').isEmail();
-    req.assert('password', 'Password cannot be blank').notEmpty();
-    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  req.assert('email', 'Email is not valid').isEmail();
+  req.assert('password', 'Password cannot be blank').notEmpty();
+  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
-    const errors = req.validationErrors();
+  const errors = req.validationErrors();
 
-    if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/login');
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('/login');
+  }
+
+  passport.authenticate('local', (err, user, info) => {
+    if (err) { return next(err); }
+    if (!user) {
+      req.flash('errors', info);
+      return res.redirect('/login');
     }
-
-    passport.authenticate('local', (err, user, info) => {
-        if (err) {
-            return next(err);
-        }
-        if (!user) {
-            req.flash('errors', info);
-            return res.redirect('/login');
-        }
-        req.logIn(user, (err) => {
-            if (err) {
-                return next(err);
-            }
-            req.flash('success', { msg: 'Success! You are logged in.' });
-            res.redirect(req.session.returnTo || '/');
-        });
-    })(req, res, next);
+    req.logIn(user, (err) => {
+      if (err) { return next(err); }
+      req.flash('success', { msg: 'Success! You are logged in.' });
+      res.redirect(req.session.returnTo || '/');
+    });
+  })(req, res, next);
 };
 
 /**
@@ -62,12 +55,12 @@ exports.postLogin = (req, res, next) => {
  * Log out.
  */
 exports.logout = (req, res) => {
-    req.logout();
-    req.session.destroy((err) => {
-        if (err) console.log('Error : Failed to destroy the session during logout.', err);
-        req.user = null;
-        res.redirect('/');
-    });
+  req.logout();
+  req.session.destroy((err) => {
+    if (err) console.log('Error : Failed to destroy the session during logout.', err);
+    req.user = null;
+    res.redirect('/');
+  });
 };
 
 /**
@@ -75,12 +68,12 @@ exports.logout = (req, res) => {
  * Signup page.
  */
 exports.getSignup = (req, res) => {
-    if (req.user) {
-        return res.redirect('/');
-    }
-    res.render('account/signup', {
-        title: 'Create Account'
-    });
+  if (req.user) {
+    return res.redirect('/');
+  }
+  res.render('account/signup', {
+    title: 'Create Account'
+  });
 };
 
 /**
@@ -88,43 +81,39 @@ exports.getSignup = (req, res) => {
  * Create a new local account.
  */
 exports.postSignup = (req, res, next) => {
-    req.assert('email', 'Email is not valid').isEmail();
-    req.assert('password', 'Password must be at least 4 characters long').len(4);
-    req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
-    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  req.assert('email', 'Email is not valid').isEmail();
+  req.assert('password', 'Password must be at least 4 characters long').len(4);
+  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
-    const errors = req.validationErrors();
+  const errors = req.validationErrors();
 
-    if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/signup');
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('/signup');
+  }
+
+  const user = new User({
+    email: req.body.email,
+    password: req.body.password
+  });
+
+  User.findOne({ email: req.body.email }, (err, existingUser) => {
+    if (err) { return next(err); }
+    if (existingUser) {
+      req.flash('errors', { msg: 'Account with that email address already exists.' });
+      return res.redirect('/signup');
     }
-
-    const user = new User({
-        email: req.body.email,
-        password: req.body.password
-    });
-
-    User.findOne({ email: req.body.email }, (err, existingUser) => {
+    user.save((err) => {
+      if (err) { return next(err); }
+      req.logIn(user, (err) => {
         if (err) {
-            return next(err);
+          return next(err);
         }
-        if (existingUser) {
-            req.flash('errors', { msg: 'Account with that email address already exists.' });
-            return res.redirect('/signup');
-        }
-        user.save((err) => {
-            if (err) {
-                return next(err);
-            }
-            req.logIn(user, (err) => {
-                if (err) {
-                    return next(err);
-                }
-                res.redirect('/');
-            });
-        });
+        res.redirect('/');
+      });
     });
+  });
 };
 
 /**
@@ -132,38 +121,9 @@ exports.postSignup = (req, res, next) => {
  * Profile page.
  */
 exports.getAccount = (req, res) => {
-    res.render('account/profile', {
-        title: 'Account Management'
-    });
-};
-/**
- * GET /account/detail
- * Profile  page.
- */
-exports.getAccountDetail = (req, res) => {
-    let userId = undefined;
-
-    if (req.query.id != undefined && req.query.id != '' && req.query.id != null) {
-        userId = req.query.id;
-    }
-    else if (req.user != undefined) {
-        userId = req.user.username;
-    }
-    else {
-        res.status(489).send('no user id');
-    }
-    if (userId != undefined) {
-        User.find({ username: userId }).then((user) => {
-            let tempRes = { name: user[0].profile.name, username: user[0].username, picture: user[0].profile.picture, isAdmin: user[0].isAdmin };
-            // tempRes.isAdmin = user.isAdmin;
-            res.status(200).send(tempRes);
-        }).catch((err) => {
-            res.status(489).send(err);
-        })
-    }
-
-
-
+  res.render('account/profile', {
+    title: 'Account Management'
+  });
 };
 
 /**
@@ -171,37 +131,35 @@ exports.getAccountDetail = (req, res) => {
  * Update profile information.
  */
 exports.postUpdateProfile = (req, res, next) => {
-    req.assert('email', 'Please enter a valid email address.').isEmail();
-    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  req.assert('email', 'Please enter a valid email address.').isEmail();
+  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
-    const errors = req.validationErrors();
+  const errors = req.validationErrors();
 
-    if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/account');
-    }
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('/account');
+  }
 
-    User.findById(req.user.id, (err, user) => {
-        if (err) {
-            return next(err);
+  User.findById(req.user.id, (err, user) => {
+    if (err) { return next(err); }
+    user.email = req.body.email || '';
+    user.profile.name = req.body.name || '';
+    user.profile.gender = req.body.gender || '';
+    user.profile.location = req.body.location || '';
+    user.profile.website = req.body.website || '';
+    user.save((err) => {
+      if (err) {
+        if (err.code === 11000) {
+          req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
+          return res.redirect('/account');
         }
-        user.email = req.body.email || '';
-        user.profile.name = req.body.name || '';
-        user.profile.gender = req.body.gender || '';
-        user.profile.location = req.body.location || '';
-        user.profile.website = req.body.website || '';
-        user.save((err) => {
-            if (err) {
-                if (err.code === 11000) {
-                    req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
-                    return res.redirect('/account');
-                }
-                return next(err);
-            }
-            req.flash('success', { msg: 'Profile information has been updated.' });
-            res.redirect('/account');
-        });
+        return next(err);
+      }
+      req.flash('success', { msg: 'Profile information has been updated.' });
+      res.redirect('/account');
     });
+  });
 };
 
 /**
@@ -209,29 +167,25 @@ exports.postUpdateProfile = (req, res, next) => {
  * Update current password.
  */
 exports.postUpdatePassword = (req, res, next) => {
-    req.assert('password', 'Password must be at least 4 characters long').len(4);
-    req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  req.assert('password', 'Password must be at least 4 characters long').len(4);
+  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
-    const errors = req.validationErrors();
+  const errors = req.validationErrors();
 
-    if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/account');
-    }
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('/account');
+  }
 
-    User.findById(req.user.id, (err, user) => {
-        if (err) {
-            return next(err);
-        }
-        user.password = req.body.password;
-        user.save((err) => {
-            if (err) {
-                return next(err);
-            }
-            req.flash('success', { msg: 'Password has been changed.' });
-            res.redirect('/account');
-        });
+  User.findById(req.user.id, (err, user) => {
+    if (err) { return next(err); }
+    user.password = req.body.password;
+    user.save((err) => {
+      if (err) { return next(err); }
+      req.flash('success', { msg: 'Password has been changed.' });
+      res.redirect('/account');
     });
+  });
 };
 
 /**
@@ -239,152 +193,30 @@ exports.postUpdatePassword = (req, res, next) => {
  * Delete user account.
  */
 exports.postDeleteAccount = (req, res, next) => {
-    User.remove({ _id: req.user.id }, (err) => {
-        if (err) {
-            return next(err);
-        }
-        req.logout();
-        req.flash('info', { msg: 'Your account has been deleted.' });
-        res.redirect('/');
-    });
+  User.deleteOne({ _id: req.user.id }, (err) => {
+    if (err) { return next(err); }
+    req.logout();
+    req.flash('info', { msg: 'Your account has been deleted.' });
+    res.redirect('/');
+  });
 };
-
-/**
- * POST /account/importUserPhotos
- * Post User Photos.
- */
-exports.importUserPhotos = (req, res, next) => {
-    let request_object = req.body, failed = passed = 0;
-    // for (const photos of req.body) {
-    // if (request_object instanceof Array) {
-    //     for (let i = 0; i < request_object.length; i++) {
-    //         const newInstagramPhotos = new InstagramPhotos({
-    //             caption: request_object[i].caption,
-    //             _id: request_object[i]._id,
-    //             facebookId: req.user.facebook,
-    //             like_count: request_object[i].like_count,
-    //             media_type: request_object[i].media_type,
-    //             media_url: request_object[i].media_url,
-    //             permalink: request_object[i].permalink,
-    //             username: request_object[i].username,
-    //         });
-    //         InstagramPhotos.findOne({ _id: request_object[i]._id }).then((existingPhoto) => {
-    //             if (!existingPhoto) {
-    //                 let savephote = newInstagramPhotos.save();
-    //                // let updateuserphoto = UserAllMedia.findOneAndUpdate({ _id: request_object[i]._id }, { sendForReview: true });
-    //                 Promise.all([savephote]).then((response) => {
-    //                     console.log('added new instagram photo');
-    //                     passed++;
-    //                 }).catch((err) => {
-    //                     failed++;
-    //                     console.error('db operation failed while insrerting photos send by user : ', err);
-    //                 });
-    //             }
-    //         });
-
-    //     }
-    //     if (failed <= 0) {
-
-    //         newAdminTask(req,res,req.user,request_object);
-
-    //     }
-    //     else {
-    //         res.status(489).send({ "failed": failed, "passed": passed });
-    //     }
-    // } else {
-    //     res.status(489).send('Invalid Input');
-    // }
-
-    newAdminTask(req, res, req.user, request_object);
-
-
-    // }
-
-
-}
-
-newAdminTask = (req, res, user, request_object) => {
-    const adminTask = new AdminTask({ user: user, userMedia: request_object });
-    adminTask.save((err) => {
-        if (err) {
-            //return next(err);
-            console.log('error while creating admin task');
-            res.status(489).send({ err: "err posting  photos" });
-
-
-        }
-        console.log('added new admin task');
-        res.status(200).send({ success: "sucessfully posted  photos" });
-
-
-    });
-    // console.log(user);
-}
-
-
-/**
- * POST /account/getAllUnSubmitedPhotos
- * get all  User Photos.
- * #todo crate proper index
- */
-exports.getAllUnSubmitedPhotos = (req, res, next) => {
-
-    UserAllMedia.find({ facebookId: req.user.facebook }).then((result) => {
-        res.status(200).send(result);
-
-    }).catch((err) => {
-        res.status(489).send(err);
-
-    });
-
-
-};
-
-
-exports.getUserBlogPhotos = (req, res, next) => {
-    let userId = undefined;
-    if (req.query.id != undefined && req.query.id != '' && req.query.id != null) {
-        userId = req.query.id;
-    }
-    else if (req.user != undefined) {
-        userId = req.user.username;
-    }
-    else {
-        res.status(489).send('no user id');
-    }
-    // let userId=req.params.id||req.user.facebook;
-    if (userId != undefined) {
-        InstagramPhotos.find({ username: userId }).then((result => {
-            // console.log(result);
-            res.status(200).send(result);
-        })).catch((err) => {
-            res.status(489).send(err)
-        });
-    }
-
-};
-
 
 /**
  * GET /account/unlink/:provider
  * Unlink OAuth provider.
  */
 exports.getOauthUnlink = (req, res, next) => {
-    const { provider } = req.params;
-    User.findById(req.user.id, (err, user) => {
-        if (err) {
-            return next(err);
-        }
-        user[provider] = undefined;
-        user.tokens = user.tokens.filter(token => token.kind !== provider);
-        user.save((err) => {
-            if (err) {
-                return next(err);
-            }
-            req.flash('info', { msg: `${provider} account has been unlinked.` });
-            res.redirect('/account');
-        });
+  const { provider } = req.params;
+  User.findById(req.user.id, (err, user) => {
+    if (err) { return next(err); }
+    user[provider] = undefined;
+    user.tokens = user.tokens.filter(token => token.kind !== provider);
+    user.save((err) => {
+      if (err) { return next(err); }
+      req.flash('info', { msg: `${provider} account has been unlinked.` });
+      res.redirect('/account');
     });
+  });
 };
 
 /**
@@ -392,24 +224,22 @@ exports.getOauthUnlink = (req, res, next) => {
  * Reset Password page.
  */
 exports.getReset = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        return res.redirect('/');
-    }
-    User
-        .findOne({ passwordResetToken: req.params.token })
-        .where('passwordResetExpires').gt(Date.now())
-        .exec((err, user) => {
-            if (err) {
-                return next(err);
-            }
-            if (!user) {
-                req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
-                return res.redirect('/forgot');
-            }
-            res.render('account/reset', {
-                title: 'Password Reset'
-            });
-        });
+  if (req.isAuthenticated()) {
+    return res.redirect('/');
+  }
+  User
+    .findOne({ passwordResetToken: req.params.token })
+    .where('passwordResetExpires').gt(Date.now())
+    .exec((err, user) => {
+      if (err) { return next(err); }
+      if (!user) {
+        req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
+        return res.redirect('/forgot');
+      }
+      res.render('account/reset', {
+        title: 'Password Reset'
+      });
+    });
 };
 
 /**
@@ -417,67 +247,83 @@ exports.getReset = (req, res, next) => {
  * Process the reset password request.
  */
 exports.postReset = (req, res, next) => {
-    req.assert('password', 'Password must be at least 4 characters long.').len(4);
-    req.assert('confirm', 'Passwords must match.').equals(req.body.password);
+  req.assert('password', 'Password must be at least 4 characters long.').len(4);
+  req.assert('confirm', 'Passwords must match.').equals(req.body.password);
 
-    const errors = req.validationErrors();
+  const errors = req.validationErrors();
 
-    if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('back');
-    }
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('back');
+  }
 
-    const resetPassword = () =>
-        User
-            .findOne({ passwordResetToken: req.params.token })
-            .where('passwordResetExpires').gt(Date.now())
-            .then((user) => {
-                if (!user) {
-                    req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
-                    return res.redirect('back');
-                }
-                user.password = req.body.password;
-                user.passwordResetToken = undefined;
-                user.passwordResetExpires = undefined;
-                return user.save().then(() => new Promise((resolve, reject) => {
-                    req.logIn(user, (err) => {
-                        if (err) {
-                            return reject(err);
-                        }
-                        resolve(user);
-                    });
-                }));
-            });
-
-    const sendResetPasswordEmail = (user) => {
+  const resetPassword = () =>
+    User
+      .findOne({ passwordResetToken: req.params.token })
+      .where('passwordResetExpires').gt(Date.now())
+      .then((user) => {
         if (!user) {
-            return;
+          req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
+          return res.redirect('back');
         }
-        const transporter = nodemailer.createTransport({
+        user.password = req.body.password;
+        user.passwordResetToken = undefined;
+        user.passwordResetExpires = undefined;
+        return user.save().then(() => new Promise((resolve, reject) => {
+          req.logIn(user, (err) => {
+            if (err) { return reject(err); }
+            resolve(user);
+          });
+        }));
+      });
+
+  const sendResetPasswordEmail = (user) => {
+    if (!user) { return; }
+    let transporter = nodemailer.createTransport({
+      service: 'SendGrid',
+      auth: {
+        user: process.env.SENDGRID_USER,
+        pass: process.env.SENDGRID_PASSWORD
+      }
+    });
+    const mailOptions = {
+      to: user.email,
+      from: 'hackathon@starter.com',
+      subject: 'Your Hackathon Starter password has been changed',
+      text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n`
+    };
+    return transporter.sendMail(mailOptions)
+      .then(() => {
+        req.flash('success', { msg: 'Success! Your password has been changed.' });
+      })
+      .catch((err) => {
+        if (err.message === 'self signed certificate in certificate chain') {
+          console.log('WARNING: Self signed certificate in certificate chain. Retrying with the self signed certificate. Use a valid certificate if in production.');
+          transporter = nodemailer.createTransport({
             service: 'SendGrid',
             auth: {
-                user: process.env.SENDGRID_USER,
-                pass: process.env.SENDGRID_PASSWORD
+              user: process.env.SENDGRID_USER,
+              pass: process.env.SENDGRID_PASSWORD
+            },
+            tls: {
+              rejectUnauthorized: false
             }
-        });
-        const mailOptions = {
-            to: user.email,
-            from: 'hackathon@starter.com',
-            subject: 'Your Hackathon Starter password has been changed',
-            text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n`
-        };
-        return transporter.sendMail(mailOptions)
+          });
+          return transporter.sendMail(mailOptions)
             .then(() => {
-                req.flash('success', { msg: 'Success! Your password has been changed.' });
+              req.flash('success', { msg: 'Success! Your password has been changed.' });
             });
-    };
+        }
+        console.log('ERROR: Could not send password reset confirmation email after security downgrade.\n', err);
+        req.flash('warning', { msg: 'Your password has been changed, however we were unable to send you a confirmation email. We will be looking into it shortly.' });
+        return err;
+      });
+  };
 
-    resetPassword()
-        .then(sendResetPasswordEmail)
-        .then(() => {
-            if (!res.finished) res.redirect('/');
-        })
-        .catch(err => next(err));
+  resetPassword()
+    .then(sendResetPasswordEmail)
+    .then(() => { if (!res.finished) res.redirect('/'); })
+    .catch(err => next(err));
 };
 
 /**
@@ -485,12 +331,12 @@ exports.postReset = (req, res, next) => {
  * Forgot Password page.
  */
 exports.getForgot = (req, res) => {
-    if (req.isAuthenticated()) {
-        return res.redirect('/');
-    }
-    res.render('account/forgot', {
-        title: 'Forgot Password'
-    });
+  if (req.isAuthenticated()) {
+    return res.redirect('/');
+  }
+  res.render('account/forgot', {
+    title: 'Forgot Password'
+  });
 };
 
 /**
@@ -498,63 +344,147 @@ exports.getForgot = (req, res) => {
  * Create a random token, then the send user an email with a reset link.
  */
 exports.postForgot = (req, res, next) => {
-    req.assert('email', 'Please enter a valid email address.').isEmail();
-    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  req.assert('email', 'Please enter a valid email address.').isEmail();
+  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
-    const errors = req.validationErrors();
+  const errors = req.validationErrors();
 
-    if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/forgot');
-    }
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('/forgot');
+  }
 
-    const createRandomToken = randomBytesAsync(16)
-        .then(buf => buf.toString('hex'));
+  const createRandomToken = randomBytesAsync(16)
+    .then(buf => buf.toString('hex'));
 
-    const setRandomToken = token =>
-        User
-            .findOne({ email: req.body.email })
-            .then((user) => {
-                if (!user) {
-                    req.flash('errors', { msg: 'Account with that email address does not exist.' });
-                } else {
-                    user.passwordResetToken = token;
-                    user.passwordResetExpires = Date.now() + 3600000; // 1 hour
-                    user = user.save();
-                }
-                return user;
-            });
-
-    const sendForgotPasswordEmail = (user) => {
+  const setRandomToken = token =>
+    User
+      .findOne({ email: req.body.email })
+      .then((user) => {
         if (!user) {
-            return;
+          req.flash('errors', { msg: 'Account with that email address does not exist.' });
+        } else {
+          user.passwordResetToken = token;
+          user.passwordResetExpires = Date.now() + 3600000; // 1 hour
+          user = user.save();
         }
-        const token = user.passwordResetToken;
-        const transporter = nodemailer.createTransport({
-            service: 'SendGrid',
-            auth: {
-                user: process.env.SENDGRID_USER,
-                pass: process.env.SENDGRID_PASSWORD
-            }
-        });
-        const mailOptions = {
-            to: user.email,
-            from: 'hackathon@starter.com',
-            subject: 'Reset your password on Hackathon Starter',
-            text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
+        return user;
+      });
+
+  const sendForgotPasswordEmail = (user) => {
+    if (!user) { return; }
+    const token = user.passwordResetToken;
+    let transporter = nodemailer.createTransport({
+      service: 'SendGrid',
+      auth: {
+        user: process.env.SENDGRID_USER,
+        pass: process.env.SENDGRID_PASSWORD
+      }
+    });
+    const mailOptions = {
+      to: user.email,
+      from: 'hackathon@starter.com',
+      subject: 'Reset your password on Hackathon Starter',
+      text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
         Please click on the following link, or paste this into your browser to complete the process:\n\n
         http://${req.headers.host}/reset/${token}\n\n
         If you did not request this, please ignore this email and your password will remain unchanged.\n`
-        };
-        return transporter.sendMail(mailOptions)
-            .then(() => {
-                req.flash('info', { msg: `An e-mail has been sent to ${user.email} with further instructions.` });
-            });
     };
+    return transporter.sendMail(mailOptions)
+      .then(() => {
+        req.flash('info', { msg: `An e-mail has been sent to ${user.email} with further instructions.` });
+      })
+      .catch((err) => {
+        if (err.message === 'self signed certificate in certificate chain') {
+          console.log('WARNING: Self signed certificate in certificate chain. Retrying with the self signed certificate. Use a valid certificate if in production.');
+          transporter = nodemailer.createTransport({
+            service: 'SendGrid',
+            auth: {
+              user: process.env.SENDGRID_USER,
+              pass: process.env.SENDGRID_PASSWORD
+            },
+            tls: {
+              rejectUnauthorized: false
+            }
+          });
+          return transporter.sendMail(mailOptions)
+            .then(() => {
+              req.flash('info', { msg: `An e-mail has been sent to ${user.email} with further instructions.` });
+            });
+        }
+        console.log('ERROR: Could not send forgot password email after security downgrade.\n', err);
+        req.flash('errors', { msg: 'Error sending the password reset message. Please try again shortly.' });
+        return err;
+      });
+  };
 
-    createRandomToken
-        .then(setRandomToken)
-        .then(sendForgotPasswordEmail)
-        .then(() => res.redirect('/forgot'))
-        .catch(next);
+
+  createRandomToken
+    .then(setRandomToken)
+    .then(sendForgotPasswordEmail)
+    .then(() => res.redirect('/forgot'))
+    .catch(next);
+
+
+
+
+};
+
+/**
+  * post photos for review with or without product desc 
+  */
+exports.postPhotostoBlog = (req, res, next) => {
+  let data = [];
+
+  req.body.photos.map((item) => {
+    data.push(item.id);
+  });
+  UserMedias.updateMany({ 'id': data }, { $set: { publishedToBlog: true } }, { w: 1 }, (err, result) => {
+    if (err) {
+      next(err);
+    }
+
+    this.createAdminTask(req, res, next);
+  });
+
+};
+
+exports.createAdminTask = (req, res, next) => {
+  let newAdminTask = new AdminTask();
+  newAdminTask.user=req.body.user;
+  newAdminTask.userMedia=req.body.photos;
+  newAdminTask.save().then((success)=>{
+    res.sendStatus(200);
+  }).catch((err)=>{
+
+  });
+  
+};
+
+
+exports.userDetail = (req, res, next) => {
+  if (req.user) {
+    let tempUser = req.user;
+    delete tempUser.tokens;
+    delete tempUser.updatedAt;
+
+    res.status(200).send({ user: tempUser });
+  }
+}
+
+exports.getUserMedias = (req, res, next) => {
+
+  if (req.user.instagram != null || req.user.instagram != undefined) {
+    let userInstagramId = req.user.instagram
+    UserMedias.find({ instagramId: userInstagramId }, (err, success) => {
+      if (err) {
+        next(err);
+      }
+      res.status(200).send({ data: success, user: req.user.profile });
+    });
+  }
+  else {
+    res.send(200).send({ data: [] });
+  }
+
 };

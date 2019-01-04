@@ -1,197 +1,54 @@
+const { promisify } = require('util');
+const request = require('request');
+const cheerio = require('cheerio');
 const graph = require('fbgraph');
-const UserAllMedia = require('../models/UserAllMedia');
-const InstagramPhotos = require('../models/InstagramPhotos');
-const AdminTask = require('../models/AdminTask');
-// var Jimp = require('jimp');
-const Utils = require('../util/util.js')
+const userMedias = require('../controllers/userMedias')
+const ig = require('instagram-node').instagram();
+const { Venues, Users } = require('node-foursquare')({
+  secrets: {
+    clientId: process.env.FOURSQUARE_ID,
+    clientSecret: process.env.FOURSQUARE_SECRET,
+    redirectUrl: process.env.FOURSQUARE_REDIRECT_URL
+  },
+  foursquare: {
+    mode: 'foursquare',
+    version: 20140806,
+  }
+});
+
 /**
  * GET /api
  * List of API examples.
  */
 exports.getApi = (req, res) => {
-    // res.render('api/index', {
-    //     title: 'API Examples'
-    // });
-    res.status(200).send();
-
+  res.render('api/index', {
+    title: 'API Examples'
+  });
 };
-
-
-getAllInstagramMedia = (req, res, next, instagramBusinessAccountId) => {
-
-    const token = req.user.tokens.find(token => token.kind === 'facebook');
-    graph.setAccessToken(token.accessToken);
-    const uri = instagramBusinessAccountId + '/media?fields=media_url,like_count,timestamp,permalink,caption,username';
-    graph.get(uri, (err, data) => {
-        if (err) {
-            return next(err);
-        }
-        saveUserMediaLiks(req, res, next, data);
-    });
-}
-
-
-// getInstagramMediaToUrl = (req, res, next, instagramBusinessAccountId) => {
-//     const token = req.user.tokens.find(token => token.kind === 'facebook');
-//     graph.setAccessToken(token.accessToken);
-//     const uri = instagramBusinessAccountId + '/media';
-//     graph.get(uri, (err, data) => {
-//         if (err) {
-//             return next(err);
-//         }
-//         res.send(data);
-//     });
-// }
-
-
-
-
 
 /**
- * POST /account/importUserPhotos
- * Post User Photos.
+ * GET /api/foursquare
+ * Foursquare API example.
  */
-saveUserMediaLiks = (req, res, next, data) => {
-    let allMedia = []
-    //console.log(data);
-    data.data.map((mediaObject) => {
-        // var counter = 0;
-        // Jimp.read(media.media_url)
-        //     .then(image => {
-        //         // Do stuff with the image.
-        //         // counter++;
-        //         image
-        //             .resize(256, 256) // resize
-        //             .quality(100) // set JPEG quality
-        //             .getBase64(Jimp.MIME_JPEG, (err, res) => {
-        //                 // console.log(res)
-        //                 if(err){
-        //                     console.log(err);
-        //                 }
-        //                 if(!err){
-        //                     var temp = media;
-        //                     temp.image = res;
-        //                     ++counter;
-        //                     if(counter<=1)
-        //                     // console.log( temp.image);
-        //                     // console.log('-------------------\n');
-        //                     allMedia.push(createMedia(temp, req.user.facebook));
-        //                 }
-
-        //             });
-
-        //     })
-        //     .catch(err => {
-        //         // Handle an exception.
-        //         console.log('image upload error');
-        //         console.log(err);
-        //     });
-
-        allMedia.push({
-            facebookId: req.user.facebook,
-            media_url: mediaObject.media_url,
-            permalink: mediaObject.permalink,
-            like_count: mediaObject.like_count,
-            datePosted: mediaObject.timestamp,
-            caption: mediaObject.caption,
-            _id: mediaObject.id,
-            image: '',
-            username:req.user.username
-        });
-
-
+exports.getFoursquare = async (req, res, next) => {
+  const token = req.user.tokens.find(token => token.kind === 'foursquare');
+  try {
+    const getTrendingAsync = promisify(Venues.getTrending);
+    const getVenueAsync = promisify(Venues.getVenue);
+    const getCheckinsAsync = promisify(Users.getCheckins);
+    const trendingVenues = await getTrendingAsync('40.7222756', '-74.0022724', { limit: 50 }, token.accessToken);
+    const venueDetail = await getVenueAsync('49da74aef964a5208b5e1fe3', token.accessToken);
+    const userCheckins = await getCheckinsAsync('self', null, token.accessToken);
+    return res.render('api/foursquare', {
+      title: 'Foursquare API',
+      trendingVenues,
+      venueDetail,
+      userCheckins
     });
-
-    UserAllMedia.insertMany(allMedia, { ordered: false }, (result, err) => {
-        if (!err) {
-            console.log(result);
-            res.status(200).send({msg:'successfully impoted all the photos'});
-        }
-        else {
-            console.log(err);
-            res.status(200).send({msg:'failed import photos'});
-        }
-    });
-}
-
-/**
- * GET /api/getAllPhotoss
- * List getAllPhotoss of API examples.
- */
-exports.getAllPhotos = (req, res) => {
-
-    InstagramPhotos.find({}).then((result) => {
-        if (result) {
-            res.status(200).send(result);
-        } else {
-            res.status(200).send([]);
-        }
-    }, (err) => {
-        res.status(489).send(err);
-
-    })
-
+  } catch (err) {
+    return next(err);
+  }
 };
-
-exports.getAllAdminTask = (req, res) => {
-
-    AdminTask.find({}).sort('-createdAt').then((result) => {
-        if (result) {
-            res.status(200).send(result);
-        } else {
-            res.status(200).send([]);
-        }
-    }, (err) => {
-        res.status(489).send(err);
-
-    });
-
-};
-exports.deleteAdminTask = (req, res) => {
-
-    AdminTask.deleteMany({}).then((result) => {
-        if (result) {
-            res.status(200).send([{
-                'result': 'sucess'
-            }]);
-        } else {
-            res.status(200).send([]);
-        }
-    }, (err) => {
-        res.status(489).send(err);
-
-    })
-
-};
-
-
-// approves task and adds product lisk
-
-exports.approveTask =(req,res)=>{
-
-    console.log(req.body);
-    let userDetails=req.body.user.username;
-    let postedMedias=req.body.usermedia;
-    let payload=[];
-    postedMedias.map((item)=>{
-        item.user=userDetails;
-        payload.push(item);
-    });
-
-
-   InstagramPhotos.insertMany(payload,{ordered:false},(success,err)=>{
-       if(!err){
-        res.status(200).send({msg:success});
-       }
-       else{
-        //    console
-        res.status(489).send({msg:'Failed to post photos'});
-       }
-   })
-
-    
-}
-
 
 
 /**
@@ -199,71 +56,107 @@ exports.approveTask =(req,res)=>{
  * Facebook API example.
  */
 exports.getFacebook = (req, res, next) => {
-    var instagramBusinessAccountId = [];
-    const token = req.user.tokens.find(token => token.kind === 'facebook');
-    graph.setAccessToken(token.accessToken);
-    graph.get(`me/accounts?fields=instagram_business_account`, (err, profile) => {
-        if (err) {
-            return next(err);
-        }
-        console.log(profile);
-        profile.data.map((item) => {
-            if (item.instagram_business_account != undefined) {
-                instagramBusinessAccountId.push(item.instagram_business_account.id);
-            }
-        });
-
-        if (instagramBusinessAccountId.length > 0) {
-            getAllInstagramMedia(req, res, next, instagramBusinessAccountId[0]);
-        }
-        else {
-            res.status(489).send({msg:'buisness accout not found'});
-        }
+  const token = req.user.tokens.find(token => token.kind === 'facebook');
+  graph.setAccessToken(token.accessToken);
+  graph.get(`${req.user.facebook}?fields=id,name,email,first_name,last_name,gender,link,locale,timezone`, (err, profile) => {
+    if (err) { return next(err); }
+    res.render('api/facebook', {
+      title: 'Facebook API',
+      profile
     });
+  });
 };
 
-exports.getAllbuisnessAccount =(req,res,next)=>{
-    var instagramBusinessAccountId = [];
-    const token = req.user.tokens.find(token => token.kind === 'facebook');
-    graph.setAccessToken(token.accessToken);
-    graph.get(`me/accounts?fields=instagram_business_account,is_owned,name`, (err, profile) => {
-        if (err) {
-            return next(err);
-        }
-        console.log(profile);
-        profile.data.map((item) => {
-            if (item.instagram_business_account != undefined) {
-                instagramBusinessAccountId.push(item.instagram_business_account.id);
-            }
-        });
-
-        if (instagramBusinessAccountId.length > 0) {
-            res.status(200).send(instagramBusinessAccountId);
-        }
-        else {
-            res.status(489).send('buisness accout not found');
-        }
+/**
+ * GET /api/scraping
+ * Web scraping example using Cheerio library.
+ */
+exports.getScraping = (req, res, next) => {
+  request.get('https://news.ycombinator.com/', (err, request, body) => {
+    if (err) { return next(err); }
+    const $ = cheerio.load(body);
+    const links = [];
+    $('.title a[href^="http"], a[href^="https"]').each((index, element) => {
+      links.push($(element));
     });
-}
+    res.render('api/scraping', {
+      title: 'Web Scraping',
+      links
+    });
+  });
+};
+
+/**
+ * GET /api/aviary
+ * Aviary image processing example.
+ */
+exports.getAviary = (req, res) => {
+  res.render('api/aviary', {
+    title: 'Aviary API'
+  });
+};
+
+/**
+ * GET /api/instagram
+ * Instagram API example.
+ */
+exports.getInstagram = async (req, res, next) => {
+  const token = req.user.tokens.find(token => token.kind === 'instagram');
+  ig.use({ client_id: process.env.INSTAGRAM_ID, client_secret: process.env.INSTAGRAM_SECRET });
+  ig.use({ access_token: token.accessToken });
+  try {
+    const userSearchAsync = promisify(ig.user_search);
+    const userAsync = promisify(ig.user);
+    const userSelfMediaRecentAsync = promisify(ig.user_self_media_recent);
+    //  const searchByUsername = await userSearchAsync('mapurba');
+    // const searchByUserId = await userAsync('1326522477');
+    const myRecentMedia = await userSelfMediaRecentAsync();
+
+    res.render('api/instagram', {
+      title: 'Instagram API',
+      usernames: [],
+      userById: [],
+      myRecentMedia
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 
+/**
+ * GET /api/instagram
+ * Instagram API example.
+ */
+exports.saveInstagramImage = async (user, next) => {
+  const token = user.tokens.find(token => token.kind === 'instagram');
+  ig.use({ client_id: process.env.INSTAGRAM_ID, client_secret: process.env.INSTAGRAM_SECRET });
+  ig.use({ access_token: token.accessToken });
+  try {
+ 
+    const userSelfMediaRecentAsync = promisify(ig.user_self_media_recent);
+    const myRecentMedia = await userSelfMediaRecentAsync();
 
-//
-// /**
-//  * GET /api/scraping
-//  * Web scraping example using Cheerio library.
-//  */
-// exports.getScraping = (req, res, next) => {
-//   request.get('https://news.ycombinator.com/', (err, request, body) => {
-//     if (err) { return next(err); }
-//     const $ = cheerio.load(body);
-//     const links = [];
-//     $('.title a[href^="http"], a[href^="https"]').each((index, element) => {
-//       links.push($(element));
-//     });
-//     res.render('api/scraping', {
-//       title: 'Web Scraping',
-//       links
-//     });
-//   });
-// };
+    let allMedia = myRecentMedia;
+    const saveResult = await userMedias.insertMedia(allMedia);
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * GET /api/upload
+ * File Upload API example.
+ */
+
+exports.getFileUpload = (req, res) => {
+  res.render('api/upload', {
+    title: 'File Upload'
+  });
+};
+
+exports.postFileUpload = (req, res) => {
+  req.flash('success', { msg: 'File was uploaded successfully.' });
+  res.redirect('/api/upload');
+};

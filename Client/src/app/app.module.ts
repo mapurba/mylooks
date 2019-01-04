@@ -13,6 +13,7 @@ import { BlogComponent } from './blog/blog.component';
 import { AdminConsoleComponent } from './admin/admin-console/admin-console.component';
 import { FormsModule }   from '@angular/forms';
 import { PrivacyComponent } from './privacy/privacy.component';
+import { PostPhotosToblogComponent } from './post-photos-toblog/post-photos-toblog.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { PrivacyComponent } from './privacy/privacy.component';
     ProfileComponent,
     BlogComponent,
     AdminConsoleComponent,
-    PrivacyComponent
+    PrivacyComponent,
+    PostPhotosToblogComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
   ],
   providers: [
     InterceptService,
-    { provide: APP_BASE_HREF, useValue : '/#/' },
+    { provide: APP_BASE_HREF, useValue : '/' },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptService,

@@ -22,7 +22,7 @@
           <tr>
             <!-- <th scope="col">#</th> -->
             <th scope="col">User</th>
-            <th scope="col">Media</th>
+            <th scope="col">Media Count</th>
             <th scope="col">Published</th>
             <th scope="col">Date</th>
           </tr>
@@ -30,12 +30,15 @@
         <tbody>
           <tr *ngFor="let item of adminTask">
             <!-- <th scope="row">1</th> -->
-            <td> <a class="btn" (click)="taskDetails(item)"> {{item?.user?.profile?.name}}</a></td>
+            <td> 
+                <a   href="#" (click)="taskDetails(item)" >
+                  <img [src]="item?.user?.profile_picture" style="width: 30px" class="pr-1">
+                  <span>{{item?.user?.full_name}}</span>
+                </a>
+              
+            </td>
             <td class="table_image_col">
-              <div *ngFor="let medias of item.userMedia |slice:0:3;">
-                <img [src]="medias.media_url" class="profile__avatar tableImage" />
-              </div>
-
+              {{item?.userMedia?.length}}
             </td>
             <td>{{item.published}}</td>
             <td>{{item.createdAt|date}}</td>
