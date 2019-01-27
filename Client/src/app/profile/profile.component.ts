@@ -13,14 +13,14 @@ export class ProfileComponent implements OnInit {
   userDetail: any;
   enableCheckBoxes: boolean = false;
   enablePostPopup:boolean=false;
-  publishPhotoList:Map<String,any>;
+ 
   constructor(private userService: UserService) {
 
 
    // this.getUserDetail();
     this.getUserPhotos();
 
-    this.publishPhotoList = new Map();
+    
 
   }
 
@@ -68,27 +68,6 @@ export class ProfileComponent implements OnInit {
     $('#postphotostoblog').modal('show');
   }
 
-  addPhotoToList(item, $event) {
-    let tempitem= Object.assign({},item);
-    tempitem.image="";
-    if( $event.target.checked){
-      
-      this.publishPhotoList.set(item._id,tempitem);
-    }
-    else{
-      this.publishPhotoList.delete(item._id);
-    }
-    
-  }
-
-  publish(){
-
-    this.userService.reviewPhoto(this.publishPhotoList).subscribe((res)=>{
-    //  console.log(res);
-      this.getUserPhotos();
-    })
-  }
-  
 
   ngOnInit() {
   }

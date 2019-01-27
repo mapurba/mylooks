@@ -52,11 +52,13 @@ export class AdminConsoleComponent implements OnInit {
   saveimage($event) {
     this.handleFileSelect($event);
   }
+  
   getAdminTask() {
     this.userService.getAdminTask().subscribe((res) => {
       this.adminTask = res;
     });
   }
+
   taskDetails(task) {
     this.toggleView();
     task.userMedia.map((item, index) => {

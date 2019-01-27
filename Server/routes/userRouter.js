@@ -42,9 +42,9 @@ userRouter.post('/account/delete', passportConfig.isAuthenticated, userControlle
 userRouter.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
 userRouter.get('/user/photos',passportConfig.isAuthenticated,userController.getUserMedias);
-userRouter.get('/user/details',passportConfig.isAuthenticated,userController.userDetail);
+userRouter.get('/user/details',userController.userDetail);
 userRouter.post('/user/postPhotosToBlog',passportConfig.isAuthenticated,userController.postPhotostoBlog);
-// userRouter.post('/user/postPhotosToBlog',passportConfig.isAuthenticated,userController.postPhotostoBlog);
+userRouter.get('/user/blogPhotos',userController.getUserBlogPhotos);
 
 
 

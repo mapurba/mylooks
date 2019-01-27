@@ -471,6 +471,14 @@ exports.userDetail = (req, res, next) => {
 
     res.status(200).send({ user: tempUser });
   }
+  else if(req.query['id']!=undefined){
+    User.find({"profile.username":req.query['id']},(err,result)=>{
+      if(err){
+        res.status(489).send(err);
+      }
+      res.status(200).send(result);
+    });
+  }
 }
 
 exports.getUserMedias = (req, res, next) => {
@@ -489,3 +497,15 @@ exports.getUserMedias = (req, res, next) => {
   }
 
 };
+
+
+exports.getUserBlogPhotos=(req,res,next)=>{
+  let username=req.query['id'];
+  console.log(username);
+  UserMedias.find({"user.username":username},(err,result)=>{
+    if(err){
+      res.status(489).send(err);
+    }
+    res.status(200).send(result);
+  })
+}

@@ -140,7 +140,11 @@ const userMedias = new mongoose.Schema({
     publishedToBlog:{
         type:Boolean,
         required:false
-    }
+    },
+    productLink:{
+        type:Array,
+        required:false
+    },
 }
 );
 

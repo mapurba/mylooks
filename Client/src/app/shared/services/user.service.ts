@@ -24,7 +24,7 @@ export class UserService {
   }
 
   getUserDetail(userId?:any):Observable<any>{
-    let url=userId?`/api/account/detail?id=${userId}`:'/api/account/detail';
+    let url=userId?`/api/user/details?id=${userId}`:'/api/user/details';
     return this.http.get(url)
   }
   getUserDetailV2(userId?:any):Observable<any>{
@@ -57,7 +57,7 @@ export class UserService {
   getAdminTask():Observable<any>{
     return this.http.get('/api/admin/tasklist');
   }
-
+  
   isLogedinUser():boolean{
 
     if(this.cookieService.get('user_session')){

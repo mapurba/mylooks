@@ -1,27 +1,23 @@
 const bcrypt = require('bcrypt-nodejs');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
+const UserMedias =require('./UserMedias')
 
 
 const blogPhotos = new mongoose.Schema({
-    caption: {
-        type: String,
-        required: false
+    id: {
+        type: 'String', unique: true, required: true, dropDups: true
     },
-    user:{type:Object,required:true},
-    _id: {type: String, required: true},
-    facebookId: {type: String, required: true},
-    like_count: {type: Number},
-    media_type: {type: String, required: false},
-    media_url: {
-        type: String,
-        required: true,
-        default: ''
+    BlogPhotoId:{type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserMedias'},
+    productLink:{
+        type:Array,
+        required:true
     },
-    productLink:{type:Object,require:true},
-    permalink: {type: String, required: true, default: ''},
-    username: {type: String, required: false},
-}, {timestamps: true});
+    user:{type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'},
+       
+}, { timestamps: true });
 
 
 /**
@@ -29,6 +25,6 @@ const blogPhotos = new mongoose.Schema({
  */
 
 
-const BlogPhotos = mongoose.model('BlogPhotos', BlogPhotos);
+const BlogPhotos = mongoose.model('BlogPhotos', blogPhotos);
 
 module.exports = BlogPhotos;
