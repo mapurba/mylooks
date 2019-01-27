@@ -26,6 +26,7 @@ export class BlogComponent implements OnInit {
   }
 
   getUserDetail(userId) {
+
     this.userService.getUserDetail(userId).subscribe((res) => {
       this.userDetail = res.user;
     },(err)=>{
@@ -34,6 +35,7 @@ export class BlogComponent implements OnInit {
   }
 
   getUserblogPhotos(userId) {
+    
     let url = '/api/user/blogPhotos?id='+userId;
     this.http.get(url).subscribe((res) => {
       this.userBlogPhotos = res;

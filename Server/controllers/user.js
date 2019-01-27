@@ -500,12 +500,24 @@ exports.getUserMedias = (req, res, next) => {
 
 
 exports.getUserBlogPhotos=(req,res,next)=>{
-  let username=req.query['id'];
-  console.log(username);
-  UserMedias.find({"user.username":username},(err,result)=>{
-    if(err){
-      res.status(489).send(err);
-    }
-    res.status(200).send(result);
-  })
+  if (req.user) {
+    let tempUser = req.user;
+    // console.log(tempUser);
+    UserMedias.find({"user.username":tempUser.profile.username},(err,result)=>{
+      if(err){
+        res.status(489).send(err);
+      }
+      res.status(200).send(result);
+    })
+  }
+  else{
+    let username=req.query['id'];
+    UserMedias.find({"user.username":username},(err,result)=>{
+      if(err){
+        res.status(489).send(err);
+      }
+      res.status(200).send(result);
+    });
+  }
+  
 }
