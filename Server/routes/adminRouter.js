@@ -12,7 +12,7 @@ const adminController=require('../controllers/admin')
 
 adminRouter.get('/tasklist', passportConfig.isAuthenticatedAdmin,  adminController.getAllTask);
 // adminRouter.delete('/tasklist',passportConfig.isAuthenticatedAdmin,  apiController.deleteAdminTask);
-// adminRouter.post('/task/approve',passportConfig.isAuthenticatedAdmin,apiController.approveTask)
+adminRouter.post('/approve',passportConfig.isAuthenticatedAdmin,adminController.approveTask);
 
 
 module.exports = adminRouter;

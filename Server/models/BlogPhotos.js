@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 
 
-const instagramPhotos = new mongoose.Schema({
+const blogPhotos = new mongoose.Schema({
     caption: {
         type: String,
         required: false
@@ -29,6 +29,6 @@ const instagramPhotos = new mongoose.Schema({
  */
 
 
-const InstagramPhotos = mongoose.model('InstagramPhotos', instagramPhotos);
+const BlogPhotos = mongoose.model('BlogPhotos', BlogPhotos);
 
-module.exports = InstagramPhotos;
+module.exports = BlogPhotos;

@@ -164,6 +164,7 @@ passport.use(new InstagramStrategy({
       // to a valid e-mail address in Profile Management.
       user.email = `${profile.username}@instagram.com`;
       user.profile.website = profile._json.data.website;
+      user.profile.username=profile.username;
       user.profile.picture = profile._json.data.profile_picture;
       user.save((err) => {
         api.saveInstagramImage(user, done);

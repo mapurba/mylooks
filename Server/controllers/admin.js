@@ -7,3 +7,7 @@ exports.getAllTask = (req, res) => {
     }).catch((err) => { res.status(489); });
 
 };
+
+exports.approveTask =(req,res)=>{
+    res.send(200);
+};
