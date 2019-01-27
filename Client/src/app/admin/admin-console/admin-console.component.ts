@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/shared/services/user.service';
-import { getImagem } from 'src/app/shared/services/factories/image-factory';
+// import { getImagem } from 'src/app/shared/services/factories/image-factory';
 declare var $: any;
 
 @Component({
@@ -73,7 +73,7 @@ export class AdminConsoleComponent implements OnInit {
 
   addProductLink() {
     this.selectedTask.userMedia.map((item, index) => {
-      if (item._id == this.selectedMedia._id) {
+      if (item.id == this.selectedMedia.id) {
         item.productLink.push({ 'image': this.productImage, 'productLink': this.productLink });
       }
     });

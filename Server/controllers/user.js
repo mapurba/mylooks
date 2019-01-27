@@ -136,9 +136,10 @@ exports.postUpdateProfile = (req, res, next) => {
 
   const errors = req.validationErrors();
 
+  // done some changes
   if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/account');
+    res.status(489).send({'errors':errors});
+    // return res.redirect('/account');
   }
 
   User.findById(req.user.id, (err, user) => {
@@ -151,13 +152,13 @@ exports.postUpdateProfile = (req, res, next) => {
     user.save((err) => {
       if (err) {
         if (err.code === 11000) {
-          req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
-          return res.redirect('/account');
+        //  req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
+          return res.status(498).send({msg:'The email address you have entered is already associated with an account.'});
         }
         return next(err);
       }
-      req.flash('success', { msg: 'Profile information has been updated.' });
-      res.redirect('/account');
+      // req.flash('success', { msg: 'Profile information has been updated.' });
+      res.send({ msg: 'Profile information has been updated.' });
     });
   });
 };
@@ -182,8 +183,8 @@ exports.postUpdatePassword = (req, res, next) => {
     user.password = req.body.password;
     user.save((err) => {
       if (err) { return next(err); }
-      req.flash('success', { msg: 'Password has been changed.' });
-      res.redirect('/account');
+      // req.flash('success', { msg: 'Password has been changed.' });
+      res.send({msg:'Password has been changed.'});
     });
   });
 };

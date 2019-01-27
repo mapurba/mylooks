@@ -11,9 +11,11 @@ import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common
 import { APP_BASE_HREF } from '@angular/common';
 import { BlogComponent } from './blog/blog.component';
 import { AdminConsoleComponent } from './admin/admin-console/admin-console.component';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { PostPhotosToblogComponent } from './post-photos-toblog/post-photos-toblog.component';
+import { SignupComponent } from './signup/signup.component';
+import { AccountComponent } from './account/account.component';
 
 @NgModule({
   declarations: [
@@ -24,13 +26,16 @@ import { PostPhotosToblogComponent } from './post-photos-toblog/post-photos-tobl
     BlogComponent,
     AdminConsoleComponent,
     PrivacyComponent,
-    PostPhotosToblogComponent
+    PostPhotosToblogComponent,
+    SignupComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,
     routing,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
 
   ],
   providers: [

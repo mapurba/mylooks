@@ -1,7 +1,7 @@
 import {Injectable, Injector} from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, filter, tap } from 'rxjs/operators';
-import { Router } from "../../../../node_modules/@angular/router";
+import { Router, ActivatedRoute } from "../../../../node_modules/@angular/router";
 import { HttpInterceptor, HttpHandler, HttpEvent, HttpRequest, HttpResponse } from "@angular/common/http";
 
 
@@ -18,7 +18,7 @@ export class InterceptService implements HttpInterceptor {
 
 
 
-  constructor( private injector: Injector,private route:Router) {
+  constructor( private injector: Injector,private route:Router,private activatedRoute: ActivatedRoute) {
 
     this.isRefreshingToken = false;
   }
@@ -47,8 +47,14 @@ export class InterceptService implements HttpInterceptor {
         }
       }, error => {
         if(error.status == 401){
-          this.route.navigate(['/login']);
-          console.error('not logged in');
+          if(this.route.url ==='/privacy' || this.route.url ===''||this.route.url ==='/signup' || this.route.url === '/'){
+            console.log(this.route.url);
+          }
+          else{
+            this.route.navigate(['/login']);
+            console.error('not logged in');
+          }
+          
         }
        
       })

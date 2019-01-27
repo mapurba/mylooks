@@ -44,5 +44,8 @@ userRouter.get('/account/unlink/:provider', passportConfig.isAuthenticated, user
 userRouter.get('/user/photos',passportConfig.isAuthenticated,userController.getUserMedias);
 userRouter.get('/user/details',passportConfig.isAuthenticated,userController.userDetail);
 userRouter.post('/user/postPhotosToBlog',passportConfig.isAuthenticated,userController.postPhotostoBlog);
+// userRouter.post('/user/postPhotosToBlog',passportConfig.isAuthenticated,userController.postPhotostoBlog);
+
+
 
 module.exports = userRouter;

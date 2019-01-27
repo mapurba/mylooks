@@ -31,10 +31,10 @@
           <tr *ngFor="let item of adminTask">
             <!-- <th scope="row">1</th> -->
             <td> 
-                <a   href="#" (click)="taskDetails(item)" >
+                <button class="btn btn-link" (click)="taskDetails(item)" >
                   <img [src]="item?.user?.profile_picture" style="width: 30px" class="pr-1">
                   <span>{{item?.user?.full_name}}</span>
-                </a>
+                </button>
               
             </td>
             <td class="table_image_col">
@@ -51,7 +51,7 @@
       <ul class="list-group">
         <li *ngFor="let medias of selectedTask.userMedia" class="list-group-item d-flex ">
           <div class="taskimage">
-            <img [src]="medias.media_url" class="taskimage" />
+            <img [src]="medias.url" class="taskimage" />
 
           </div>
           <div style="padding-left: 19px;">

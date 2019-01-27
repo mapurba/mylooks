@@ -12,7 +12,7 @@ export class NavComponent implements OnInit {
   constructor(private userService:UserService) { }
 
   ngOnInit() {
-    this.getUserDetail();
+   this.getUserDetail();
   }
 
 
@@ -24,6 +24,7 @@ export class NavComponent implements OnInit {
   getUserDetail(){
     this.userService.getUserDetailV2().subscribe((res)=>{
       this.loggedInUserDetails=res.user;
+      this.userService.getUserDetailV3(res.user);
     })
   }
 

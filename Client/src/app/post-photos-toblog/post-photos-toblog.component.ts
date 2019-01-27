@@ -27,7 +27,7 @@ export class PostPhotosToblogComponent implements OnInit {
   }
 
   isPhotoSelected(item){
-    console.log( this.publishPhotoList.has(item.id) );
+    // console.log( this.publishPhotoList.has(item.id) );
    return this.publishPhotoList.has(item.id);
   }
 
@@ -52,7 +52,7 @@ export class PostPhotosToblogComponent implements OnInit {
     
     while( item=itrator.next().value){
       payload.user=item.user;
-      payload.photos.push({id:item.id,postLink:item.link});
+      payload.photos.push({id:item.id,postLink:item.link,url:item.images.low_resolution.url});
     }
     this.userService.reviewPhoto(payload).subscribe((res)=>{
     //  console.log(res);

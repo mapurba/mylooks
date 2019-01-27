@@ -17,7 +17,7 @@ export class BlogComponent implements OnInit {
   loadingPhotos:boolean=true;
   constructor(private http: HttpClient, private route: ActivatedRoute,private router:Router, private userService: UserService) {
     this.currentUserBlogID = this.route.snapshot.paramMap.get('id');
-    this.getUserDetail(this.currentUserBlogID);
+   // this.getUserDetail(this.currentUserBlogID);
     this.getUserblogPhotos(this.currentUserBlogID);
   }
 
@@ -34,7 +34,7 @@ export class BlogComponent implements OnInit {
   }
 
   getUserblogPhotos(userId) {
-    let url = userId ? `/api/api/getUserBlogPhotos?id=${userId}` : '/api/api/getUserBlogPhotos';
+    let url = userId ? `/api/getUserBlogPhotos?id=${userId}` : '/api/getUserBlogPhotos';
     this.http.get(url).subscribe((res) => {
       this.userBlogPhotos = res;
       this.loadingPhotos=false;

@@ -116,7 +116,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use(function(req, res, next) {
-  res.header('Content-Type', 'application/json');
+  // res.header('Content-Type', 'application/json');
   next();
 });
 

@@ -17,7 +17,7 @@ const passport = require('passport');
 */
 authRouter.get('/instagram', passport.authenticate('instagram'));
 authRouter.get('/instagram/callback', passport.authenticate('instagram', { failureRedirect: '/' }), (req, res) => {
-    res.redirect(req.session.returnTo || '/');
+    res.redirect('/');
 });
 authRouter.get('/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }));
 authRouter.get('/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), (req, res) => {

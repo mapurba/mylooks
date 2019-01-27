@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+
+  private userDetail = new BehaviorSubject(null);
+  currentUserDetail = this.userDetail.asObservable();
+
 
   constructor(private http: HttpClient,private cookieService: CookieService) { }
 
@@ -21,11 +25,16 @@ export class UserService {
 
   getUserDetail(userId?:any):Observable<any>{
     let url=userId?`/api/account/detail?id=${userId}`:'/api/account/detail';
-    return this.http.get(url);
+    return this.http.get(url)
   }
   getUserDetailV2(userId?:any):Observable<any>{
     let url=`/api/user/details`;
     return this.http.get(url);
+  }
+  getUserDetailV3(userDetails){
+    
+      this.userDetail.next(userDetails);
+    
   }
 
 
