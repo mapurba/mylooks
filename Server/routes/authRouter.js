@@ -16,12 +16,12 @@ const passport = require('passport');
 * OAuth authentication routes. (Sign in)
 */
 authRouter.get('/instagram', passport.authenticate('instagram'));
-authRouter.get('/instagram/callback', passport.authenticate('instagram', { failureRedirect: '/' }), (req, res) => {
-    res.redirect('/');
+authRouter.get('/instagram/callback', passport.authenticate('instagram', { failureRedirect: '/profile' }), (req, res) => {
+    res.redirect('/profile');
 });
 authRouter.get('/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }));
 authRouter.get('/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), (req, res) => {
-    res.redirect(req.session.returnTo || '/');
+    res.redirect(req.session.returnTo || '/profile');
 });
 
 /**
