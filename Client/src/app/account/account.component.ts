@@ -48,7 +48,7 @@ export class AccountComponent implements OnInit {
 
   }
 
-  submitProfile(event) {
+  submitProfile() {
     this.http.post('/api/account/profile', this.accountProfileForm.value).subscribe((res) => {
       alert('success');
     }, (err) => {
