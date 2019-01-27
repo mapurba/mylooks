@@ -28,7 +28,14 @@ export class BlogComponent implements OnInit {
   getUserDetail(userId) {
 
     this.userService.getUserDetail(userId).subscribe((res) => {
-      this.userDetail = res.user;
+      if(res.user==undefined){
+        this.userDetail=res[0];
+      }
+      else{
+        this.userDetail = res.user;
+      }
+      
+
     },(err)=>{
       this.router.navigate['/'];
     });

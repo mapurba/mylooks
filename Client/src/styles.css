@@ -22,11 +22,12 @@ html {
     height: 45px;
     line-height: 45px;
   
-    p, ul {
-      margin-bottom: 0;
-    }
+    
   }
   
+  footer ,p, ul {
+    margin-bottom: 0;
+  }
   
   textarea {
     resize: vertical;

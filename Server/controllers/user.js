@@ -464,14 +464,7 @@ exports.createAdminTask = (req, res, next) => {
 
 
 exports.userDetail = (req, res, next) => {
-  if (req.user) {
-    let tempUser = req.user;
-    delete tempUser.tokens;
-    delete tempUser.updatedAt;
-
-    res.status(200).send({ user: tempUser });
-  }
-  else if(req.query['id']!=undefined){
+  if(req.query['id']!=undefined && req.query['id']!='null' ){
     User.find({"profile.username":req.query['id']},(err,result)=>{
       if(err){
         res.status(489).send(err);
@@ -479,6 +472,16 @@ exports.userDetail = (req, res, next) => {
       res.status(200).send(result);
     });
   }
+  else if (req.user && (req.query['id']==undefined && req.query['id']==null )) {
+    let tempUser = req.user;
+    delete tempUser.tokens;
+    delete tempUser.updatedAt;
+
+    res.status(200).send({ user: tempUser });
+  }
+  else{
+    res.status(489);
+  } 
 }
 
 exports.getUserMedias = (req, res, next) => {
@@ -500,10 +503,22 @@ exports.getUserMedias = (req, res, next) => {
 
 
 exports.getUserBlogPhotos=(req,res,next)=>{
-  if (req.user) {
+  console.log(req.query['id']);
+  if(req.query['id']!=undefined && req.query['id']!='null' ){
+    let username=req.query['id'];
+    UserMedias.find({"user.username":username,isApproved:true},(err,result)=>{
+      if(err){
+        res.status(489).send(err);
+      }
+      res.status(200).send(result);
+    });
+  }
+  else if (req.user!=undefined ) {
     let tempUser = req.user;
+    
+    
     // console.log(tempUser);
-    UserMedias.find({"user.username":tempUser.profile.username},(err,result)=>{
+    UserMedias.find({"user.username":tempUser.profile.username,isApproved:true},(err,result)=>{
       if(err){
         res.status(489).send(err);
       }
@@ -511,13 +526,8 @@ exports.getUserBlogPhotos=(req,res,next)=>{
     })
   }
   else{
-    let username=req.query['id'];
-    UserMedias.find({"user.username":username},(err,result)=>{
-      if(err){
-        res.status(489).send(err);
-      }
-      res.status(200).send(result);
-    });
+    res.status(489);
   }
+  
   
 }

@@ -145,6 +145,7 @@ const userMedias = new mongoose.Schema({
         type:Array,
         required:false
     },
+    isApproved:{type:Boolean,required:false,default:false}
 }
 );
 
