@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit {
   }
 
   copyToClipboard() {
-    let item='https://mylooks.southeastasia.cloudapp.azure.com/blog/'+this.userDetail.username;
+    let item='http://mylooks.co/blog/'+this.userDetail.username;
     document.addEventListener('copy', (e: ClipboardEvent) => {
       e.clipboardData.setData('text/plain', (item));
       e.preventDefault();

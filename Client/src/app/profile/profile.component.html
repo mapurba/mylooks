@@ -7,29 +7,16 @@
       <div class="profile__info">
         <div class="profile__name">
           <h1 class="profile__title">{{userDetail?.name}}</h1>
-          <i ></i>
+          <i></i>
         </div>
         <div class="profile__name">
-          <a (click)="copyToClipboard()" id="share" data-toggle="tooltip" data-placement="right" title="Share your profile Click to Copy" class="profile__button u-fat-text">Share your profile</a>
-          <a (click)="showAddphotos()" *ngIf="publishPhotoList.size < 1" class="profile__button u-fat-text">Add Photos to Blog</a>
+          <a (click)="copyToClipboard()" id="share" data-toggle="tooltip" data-placement="right" title="Share your profile Click to Copy"
+            class="profile__button u-fat-text" style="background-color: #e4a1e4;">Share your profile</a>
+          <a (click)="showAddphotos()" style="background-color: #3897f0;" *ngIf="publishPhotoList.size < 1" class="profile__button u-fat-text">Add Photos
+            to Blog</a>
           <!-- <a (click)="publish()" *ngIf="publishPhotoList.size >= 1" class="profile__button u-fat-text">Publish</a> -->
         </div>
-        <ul class="profile__numbers">
-          <li class="profile__posts">
-            <span class="profile__number u-fat-text">10</span> posts
-          </li>
-          <li class="profile__followers">
-            <span class="profile__number u-fat-text">40</span> followers
-          </li>
-          <li class="profile__following">
-            <span class="profile__number u-fat-text">134</span> following
-          </li>
-        </ul>
-        <div class="profile__bio">
-          <span class="profile__full-name u-fat-text">Apurba Mondal</span>
-          <p class="profile__full-bio"> "In order to be irreplaceable one must always be different." </p>
-          <a href="http://serranoarevalo.com" class="profile__link u-fat-text">Mylooks.com</a>
-        </div>
+
       </div>
     </header>
 
@@ -37,7 +24,7 @@
 
       <a *ngFor="let item of userPhotos?.data" class="profile-picture">
         <div class="image">
-            <img [src]='item?.images?.standard_resolution.url' class="profile-picture__picture img" />
+          <img [src]='item?.images?.standard_resolution.url' class="profile-picture__picture img" />
         </div>
         <div class="profile-picture__overlay">
           <span class="profile-picture__number">
@@ -54,4 +41,4 @@
   </section>
 </main>
 
-<app-post-photos-toblog [userPhotos]="userPhotos?.data" ></app-post-photos-toblog>
+<app-post-photos-toblog [userPhotos]="userPhotos?.data"></app-post-photos-toblog>
