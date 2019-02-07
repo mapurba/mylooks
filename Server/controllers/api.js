@@ -133,7 +133,7 @@ exports.saveInstagramImage = async (user, next) => {
   ig.use({ client_id: process.env.INSTAGRAM_ID, client_secret: process.env.INSTAGRAM_SECRET });
   ig.use({ access_token: token.accessToken });
   try {
- 
+    console.log('gettings new photos');
     const userSelfMediaRecentAsync = promisify(ig.user_self_media_recent);
     const myRecentMedia = await userSelfMediaRecentAsync();
 
@@ -141,6 +141,7 @@ exports.saveInstagramImage = async (user, next) => {
     const saveResult = await userMedias.insertMedia(allMedia);
 
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
